@@ -743,15 +743,6 @@ export default function VortexBackground({
       lastTime = now;
 
       if (!cfg.running) return;
-
-      if (isScrolling) {
-        // While actively scrolling, smoothly rotate the 3D vortex group via GPU transform.
-        // Skips expensive CPU spline math, array copies, and GPU buffer uploads,
-        // yielding 100% CPU capacity to silky 60-120fps Lenis scroll interpolation.
-        group.rotation.y += delta * 0.22 * cfg.flowDir;
-        renderer.render(scene, camera);
-        return;
-      }
       if (startTime === 0) startTime = now;
 
       const elapsed = (now - startTime) / 1000;
