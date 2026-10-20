@@ -1,0 +1,612 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships    Membership[]
+  invitations    Invitation[]
+  clients        Client[]
+  clientContacts   ClientContact[]
+  projects         Project[]
+  deliverables     Deliverable[]
+  tasks            Task[]
+  subtasks         Subtask[]
+  taskDependencies TaskDependency[]
+  activityEvents   ActivityEvent[]
+  sessions         Session[]
+  comments         Comment[]
+  fileAssets       FileAsset[]
+  notifications    Notification[]
+  socialAccounts   SocialAccount[]
+  socialPosts      SocialPost[]
+  socialPostComments SocialPostComment[]
+  memberLeaves     MemberLeave[]
+  aiOutputs        AiOutput[]
+  automationRules  AutomationRule[]
+  automationRuns   AutomationRun[]
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  passwordHash  String?
+  emailVerified DateTime?
+  calendarToken String?   @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  memberships            Membership[]
+  invitationsCreated     Invitation[]            @relation("InvitedByUser")
+  sessions               Session[]
+  projectsOwned          Project[]               @relation("ProjectOwner")
+  deliverablesOwned      Deliverable[]           @relation("DeliverableOwner")
+  tasksAssigned          Task[]                  @relation("TaskAssignee")
+  socialPostsAssigned    SocialPost[]            @relation("SocialPostAssignee")
+  notifications          Notification[]
+  notificationPreference NotificationPreference?
+  leaves                 MemberLeave[]
+  aiRequests             AiOutput[]              @relation("AiRequestedBy")
+  aiApprovals            AiOutput[]              @relation("AiApprovedBy")
+  rulesOwned             AutomationRule[]        @relation("RuleOwner")
+  rulesApproved          AutomationRule[]        @relation("RuleApprover")
+}
+
+model Membership {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  role           String   // OWNER | MANAGER | MEMBER
+  jobTitle       String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+model Invitation {
+  id             String   @id @default(cuid())
+  organizationId String
+  email          String
+  role           String   // OWNER | MANAGER | MEMBER
+  jobTitle       String?
+  token          String   @unique
+  expiresAt      DateTime
+  status         String   @default("PENDING") // PENDING | ACCEPTED | EXPIRED | REVOKED
+  invitedById    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy    User         @relation("InvitedByUser", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([token])
+  @@index([email])
+}
+
+model Client {
+  id                  String   @id @default(cuid())
+  organizationId      String
+  name                String
+  companyName         String?
+  industry            String?
+  portalAccessEnabled Boolean  @default(true)
+  isArchived          Boolean  @default(false)
+  archivedAt          DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contacts       ClientContact[]
+  projects       Project[]
+  socialAccounts SocialAccount[]
+  socialPosts    SocialPost[]
+
+  @@index([organizationId])
+  @@index([isArchived])
+}
+
+model Project {
+  id              String    @id @default(cuid())
+  organizationId  String
+  clientId        String
+  name            String
+  description     String?
+  status          String    @default("ACTIVE") // ACTIVE | ON_HOLD | COMPLETED | ARCHIVED
+  progressPercent Int       @default(0)
+  health          String    @default("ON_TRACK") // ON_TRACK | AT_RISK
+  isArchived      Boolean   @default(false)
+  archivedAt      DateTime?
+  startDate       DateTime?
+  dueDate         DateTime?
+  ownerId         String
+  shareToken         String?   @unique
+  clientLastViewedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  owner        User          @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  deliverables   Deliverable[]
+  tasks          Task[]
+  comments       Comment[]
+  fileAssets     FileAsset[]
+  socialPosts    SocialPost[]
+
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([ownerId])
+  @@index([shareToken])
+  @@index([isArchived])
+  @@index([status])
+}
+
+model Deliverable {
+  id              String    @id @default(cuid())
+  organizationId  String
+  projectId       String
+  title           String
+  description     String?
+  serviceType     String    // WEB_DEV | VIDEO | SOCIAL | BRANDING | DESIGN | OTHER
+  ownerId         String
+  dueDate         DateTime?
+  weight          Float     @default(1.0)
+  status          String    @default("NOT_STARTED") // NOT_STARTED | IN_PROGRESS | IN_REVIEW | SENT_TO_CLIENT | REVISION_REQUESTED | APPROVED | DELIVERED
+  progressPercent Int       @default(0)
+  riskStatus      String    @default("ON_TRACK") // ON_TRACK | AT_RISK
+  riskReason      String?
+  version         Int       @default(1)
+  sentToClientAt  DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner        User         @relation("DeliverableOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  tasks          Task[]
+  comments       Comment[]
+  fileAssets     FileAsset[]
+  socialPosts    SocialPost[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model Task {
+  id                  String    @id @default(cuid())
+  organizationId      String
+  projectId           String
+  deliverableId       String?
+  title               String
+  description         String?
+  assigneeId          String?
+  status              String    @default("TODO") // TODO | IN_PROGRESS | IN_REVIEW | DONE
+  priority            String    @default("MEDIUM") // LOW | MEDIUM | HIGH | URGENT
+  version             Int       @default(1)
+  startDate           DateTime?
+  dueDate             DateTime?
+  estimateHours       Float?
+  loggedHours         Float     @default(0)
+  order               Int       @default(0)
+  progressNote        String?
+  isRevisionRequested Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  organization Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  deliverable  Deliverable?     @relation(fields: [deliverableId], references: [id], onDelete: SetNull)
+  assignee     User?            @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  subtasks     Subtask[]
+  blockedBy    TaskDependency[] @relation("DependentOnTask")
+  blocking     TaskDependency[] @relation("BlockingTask")
+  comments     Comment[]
+  fileAssets   FileAsset[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([deliverableId])
+  @@index([assigneeId])
+  @@index([status])
+  @@index([priority])
+  @@index([dueDate])
+}
+
+model Subtask {
+  id             String   @id @default(cuid())
+  organizationId String
+  taskId         String
+  title          String
+  isCompleted    Boolean  @default(false)
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  task         Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([taskId])
+}
+
+model TaskDependency {
+  id              String   @id @default(cuid())
+  organizationId  String
+  blockingTaskId  String
+  dependentTaskId String
+  createdAt       DateTime @default(now())
+
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  blockingTask  Task         @relation("BlockingTask", fields: [blockingTaskId], references: [id], onDelete: Cascade)
+  dependentTask Task         @relation("DependentOnTask", fields: [dependentTaskId], references: [id], onDelete: Cascade)
+
+  @@unique([blockingTaskId, dependentTaskId])
+  @@index([organizationId])
+  @@index([blockingTaskId])
+  @@index([dependentTaskId])
+}
+
+model ClientContact {
+  id             String   @id @default(cuid())
+  organizationId String
+  clientId       String
+  email          String
+  name           String
+  title          String?
+  passwordHash   String?
+  canApprove         Boolean  @default(true)
+  magicLinkToken     String?  @unique
+  magicLinkExpiresAt DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  sessions     Session[]
+
+  @@unique([clientId, email])
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([email])
+  @@index([magicLinkToken])
+}
+
+model ActivityEvent {
+  id             String   @id @default(cuid())
+  organizationId String
+  actorId        String
+  actorType      String   // USER | CLIENT_CONTACT | SYSTEM
+  action         String
+  entityType     String   // ORGANIZATION | MEMBERSHIP | INVITATION | CLIENT | DELIVERABLE | TASK
+  entityId       String
+  metadata       String?  // JSON string
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([entityId])
+  @@index([createdAt])
+  @@index([action])
+  @@index([actorId])
+  @@index([actorType])
+}
+
+model Session {
+  id              String   @id @default(cuid())
+  sessionToken    String   @unique
+  organizationId  String
+  userId          String?
+  clientContactId String?
+  role            String   // OWNER | MANAGER | MEMBER | CLIENT
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+
+  organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user          User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientContact ClientContact? @relation(fields: [clientContactId], references: [id], onDelete: Cascade)
+
+  @@index([sessionToken])
+  @@index([organizationId])
+  @@index([userId])
+  @@index([clientContactId])
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  points    Int      @default(0)
+  expireAt  DateTime
+
+  @@index([key])
+  @@index([expireAt])
+}
+
+model Comment {
+  id             String   @id @default(cuid())
+  organizationId String
+  authorId       String
+  authorType     String   @default("USER") // USER | CLIENT_CONTACT
+  authorName     String
+  authorEmail    String?
+  projectId      String?
+  deliverableId  String?
+  taskId         String?
+  content        String
+  visibility     String   @default("INTERNAL") // INTERNAL | CLIENT_VISIBLE
+  mentions       String?  // JSON array string of mentioned user IDs
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  deliverable  Deliverable? @relation(fields: [deliverableId], references: [id], onDelete: Cascade)
+  task         Task?        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([deliverableId])
+  @@index([taskId])
+  @@index([createdAt])
+  @@index([visibility])
+}
+
+model FileAsset {
+  id              String   @id @default(cuid())
+  organizationId  String
+  uploaderId      String
+  uploaderName    String
+  projectId       String?
+  deliverableId   String?
+  taskId          String?
+  fileName        String
+  fileSize        Int
+  fileType        String
+  storageKey      String
+  storageUrl      String
+  version         Int      @default(1)
+  visibility      String   @default("INTERNAL") // INTERNAL | CLIENT_VISIBLE
+  virusScanStatus String   @default("CLEAN")    // CLEAN | SCANNING | FLAGGED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  deliverable  Deliverable? @relation(fields: [deliverableId], references: [id], onDelete: Cascade)
+  task         Task?        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([deliverableId])
+  @@index([taskId])
+  @@index([createdAt])
+}
+
+model Notification {
+  id             String   @id @default(cuid())
+  organizationId String
+  recipientId    String
+  actorId        String?
+  actorName      String?
+  type           String   // ASSIGNMENT | MENTION | COMMENT | DUE_SOON | OVERDUE | REVISION_REQUESTED | CLIENT_APPROVED
+  title          String
+  message        String
+  entityType     String   // PROJECT | DELIVERABLE | TASK | COMMENT | FILE
+  entityId       String
+  link           String?
+  isRead         Boolean  @default(false)
+  dedupeKey      String?
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  recipient    User         @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([recipientId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([dedupeKey])
+}
+
+model NotificationPreference {
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  emailNotifications   Boolean @default(true)
+  assignmentNotify     Boolean @default(true)
+  mentionNotify        Boolean @default(true)
+  commentNotify        Boolean @default(true)
+  deadlineNotify       Boolean @default(true)
+  clientApprovalNotify Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SocialAccount {
+  id             String   @id @default(cuid())
+  organizationId String
+  clientId       String
+  platform       String   // INSTAGRAM | LINKEDIN | TWITTER | YOUTUBE | FACEBOOK | TIKTOK
+  handle         String
+  profileUrl     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([clientId])
+}
+
+model SocialPost {
+  id             String    @id @default(cuid())
+  organizationId String
+  clientId       String
+  projectId      String?
+  deliverableId  String?
+  title          String?
+  platforms      String    // JSON string array e.g. ["INSTAGRAM","LINKEDIN"]
+  caption        String
+  hashtags       String?
+  mediaUrls      String?   // JSON string array of media/asset URLs or storage keys
+  scheduledAt    DateTime?
+  publishedAt    DateTime?
+  publishedUrl   String?
+  assigneeId     String?
+  status         String    @default("IDEA") // IDEA | COPY | DESIGN | INTERNAL_REVIEW | CLIENT_APPROVAL | APPROVED | SCHEDULED | PUBLISHED | REJECTED
+  order          Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  client       Client              @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  project      Project?            @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  deliverable  Deliverable?        @relation(fields: [deliverableId], references: [id], onDelete: SetNull)
+  assignee     User?               @relation("SocialPostAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  comments     SocialPostComment[]
+
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([projectId])
+  @@index([deliverableId])
+  @@index([assigneeId])
+  @@index([status])
+  @@index([scheduledAt])
+}
+
+model SocialPostComment {
+  id             String   @id @default(cuid())
+  organizationId String
+  postId         String
+  authorId       String
+  authorType     String   @default("USER") // USER | CLIENT_CONTACT
+  authorName     String
+  content        String
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  post         SocialPost   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([postId])
+  @@index([createdAt])
+}
+
+model MemberLeave {
+  id             String   @id @default(cuid())
+  organizationId String
+  userId         String
+  startDate      DateTime
+  endDate        DateTime
+  reason         String?
+  status         String   @default("APPROVED") // APPROVED | PENDING
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([startDate])
+  @@index([endDate])
+}
+
+model AiOutput {
+  id             String    @id @default(cuid())
+  organizationId String
+  feature        String    // CLIENT_UPDATE_DRAFT | RISK_REASONING | AGENCY_SUMMARY | TASK_BREAKDOWN | THREAD_SUMMARY
+  promptInputs   String    // JSON string storing referenced entities, params, and prompt context
+  outputContent  String    // Formatted text or JSON result
+  modelUsed      String    // Model name or "deterministic-engine"
+  isAiGenerated  Boolean   @default(true)
+  requestedById  String
+  status         String    @default("GENERATED") // GENERATED | APPLIED | DISCARDED
+  approvedById   String?
+  appliedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  requestedBy  User         @relation("AiRequestedBy", fields: [requestedById], references: [id], onDelete: Cascade)
+  approvedBy   User?        @relation("AiApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([feature])
+  @@index([requestedById])
+  @@index([createdAt])
+}
+
+model AutomationRule {
+  id               String   @id @default(cuid())
+  organizationId   String
+  name             String
+  description      String?
+  triggerType      String   // TASK_MOVED_TO_REVIEW | DELIVERABLE_SENT_TO_CLIENT | CLIENT_APPROVED | CLIENT_REQUESTED_REVISION | DUE_DATE_APPROACHING | POST_APPROVED
+  triggerConfig    String?  // JSON string for specific filters
+  actionType       String   // NOTIFY_USER_OR_ROLE | CREATE_TASK | CHANGE_ASSIGNEE | CHANGE_PRIORITY | POST_COMMENT | SEND_CLIENT_REMINDER
+  actionConfig     String   // JSON string specifying action details
+  ownerId          String
+  enabled          Boolean  @default(true)
+  requiresApproval Boolean  @default(false) // Actions with side effects on clients need manager approval before activation
+  isApproved       Boolean  @default(true)  // Manager approval gate
+  approvedById     String?
+  approvedAt       DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  organization     Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  owner            User            @relation("RuleOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  approvedBy       User?           @relation("RuleApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  runs             AutomationRun[]
+
+  @@index([organizationId])
+  @@index([triggerType])
+  @@index([enabled])
+}
+
+model AutomationRun {
+  id             String    @id @default(cuid())
+  organizationId String
+  ruleId         String
+  triggerEvent   String    // event description / idempotency key
+  status         String    // SUCCESS | FAILURE | RETRYING
+  reason         String?   // error details or execution logs
+  retryCount     Int       @default(0)
+  maxRetries     Int       @default(3)
+  nextRetryAt    DateTime?
+  payload        String?   // JSON input context snapshot
+  outputDetails  String?   // JSON result snapshot
+  executedAt     DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  rule           AutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([ruleId])
+  @@index([status])
+  @@index([executedAt])
+}

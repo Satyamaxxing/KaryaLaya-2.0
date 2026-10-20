@@ -1,0 +1,290 @@
+/**
+ * KaryaLaya 2.0 — Design Language Tokens
+ * Location: src/styles/tokens.css
+ *
+ * Light Editorial / Precision-Product Theme (Light is default, Dark variant behind toggle)
+ * - Canvas: #F4F4F3 / #FFFFFF, surface: #ECECEB, ink: #0B0B0C, secondary text: #6B6B70, hairline: rgba(0,0,0,0.08)
+ * - Single accent: indigo #5B5BD6 (progress, active markers, AI)
+ * - Status colors used sparingly: emerald #10B981 approved, amber #F59E0B needs review, rose #E11D48 late
+ * - Typography: Inter / Geist sans (300 headline, 500 UI, 900 wordmark), Geist Mono / JetBrains Mono metadata (10-11px, 0.12em)
+ * - Buttons: fully rounded pills (9999px)
+ * - Surfaces: soft shadow (0 20px 60px rgba(0,0,0,0.08)), radius 20-28px, hairline borders
+ * - Motion: fast 180ms, base 320ms, slow 700ms, scene 900-1200ms; cubic-bezier(.2,.7,.2,1)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --theme-mode: "dark";
+
+  /* Canvas (Background) - Deep navy / near-black */
+  --kl-canvas: #020408;
+  --kl-canvas-subtle: #050811;
+  --kl-canvas-pure: #0B101D;
+  --kl-canvas-deep: #070B14;
+
+  /* Surfaces - Sleek deep-navy glassmorphic surfaces */
+  --kl-surface-0: #050811;
+  --kl-surface-1: #070B14;
+  --kl-surface-2: #0B101D;
+  --kl-surface-3: #111827;
+  --kl-surface-4: #1F2937;
+  --kl-surface-card: rgba(11, 16, 29, 0.85);
+  --kl-surface-card-subtle: rgba(7, 11, 20, 0.75);
+
+  /* Hairlines & Borders */
+  --kl-border-hairline: rgba(255, 255, 255, 0.08);
+  --kl-border-subtle: rgba(255, 255, 255, 0.12);
+  --kl-border-card: rgba(255, 255, 255, 0.08);
+  --kl-border-focus: rgba(16, 185, 129, 0.5);
+  --kl-border-active: #10B981;
+
+  /* Ink & Typography - Cool white */
+  --kl-text-primary: #FFFFFF;
+  --kl-text-secondary: rgba(255, 255, 255, 0.72);
+  --kl-text-muted: rgba(255, 255, 255, 0.5);
+  --kl-text-dim: rgba(255, 255, 255, 0.35);
+  --kl-ink: #FFFFFF;
+
+  /* Accent: Emerald & Indigo */
+  --kl-accent: #10B981;
+  --kl-accent-hover: #059669;
+  --kl-accent-bg: rgba(16, 185, 129, 0.08);
+  --kl-accent-border: rgba(16, 185, 129, 0.25);
+  --kl-indigo: #6366F1;
+  --kl-indigo-bg: rgba(99, 102, 241, 0.08);
+  --kl-indigo-border: rgba(99, 102, 241, 0.25);
+
+  /* Status Colors */
+  --kl-emerald: #10B981;
+  --kl-emerald-bg: rgba(16, 185, 129, 0.08);
+  --kl-emerald-border: rgba(16, 185, 129, 0.25);
+  --kl-emerald-glow: rgba(16, 185, 129, 0.25);
+
+  --kl-amber: #F59E0B;
+  --kl-amber-bg: rgba(245, 158, 11, 0.08);
+  --kl-amber-border: rgba(245, 158, 11, 0.25);
+
+  --kl-rose: #FB7185;
+  --kl-rose-bg: rgba(251, 113, 133, 0.08);
+  --kl-rose-border: rgba(251, 113, 133, 0.25);
+
+  --kl-sky: #38BDF8;
+  --kl-sky-bg: rgba(56, 189, 248, 0.08);
+  --kl-sky-border: rgba(56, 189, 248, 0.25);
+
+  /* Typography Families */
+  --font-sans: "Inter", "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Elevation Shadows */
+  --kl-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --kl-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --kl-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+  --kl-shadow-modal: 0 25px 70px rgba(0, 0, 0, 0.12);
+
+  /* Border Radii */
+  --kl-radius-sm: 8px;
+  --kl-radius-md: 14px;
+  --kl-radius-lg: 20px;
+  --kl-radius-xl: 28px;
+  --kl-radius-pill: 9999px;
+
+  /* Motion Tokens */
+  --kl-duration-fast: 180ms;
+  --kl-duration-base: 320ms;
+  --kl-duration-slow: 700ms;
+  --kl-duration-scene: 1000ms;
+  --kl-ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --kl-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --kl-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Dimensions */
+  --kl-sidebar-width: 240px;
+  --kl-topbar-height: 56px;
+  --kl-max-content-width: 1400px;
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-sticky-bar: 30;
+  --z-sidebar: 40;
+  --z-drawer-backdrop: 45;
+  --z-drawer: 50;
+  --z-popover: 55;
+  --z-modal: 60;
+  --z-toast: 70;
+  --z-cursor: 9999;
+}
+
+/* Dark Theme Variant */
+/* Dark Theme (Default) */
+[data-theme="dark"],
+.dark {
+  --theme-mode: "dark";
+
+  --kl-canvas: #020408;
+  --kl-canvas-subtle: #050811;
+  --kl-canvas-pure: #0B101D;
+  --kl-canvas-deep: #070B14;
+
+  --kl-surface-0: #050811;
+  --kl-surface-1: #070B14;
+  --kl-surface-2: #0B101D;
+  --kl-surface-3: #111827;
+  --kl-surface-4: #1F2937;
+  --kl-surface-card: rgba(11, 16, 29, 0.85);
+  --kl-surface-card-subtle: rgba(7, 11, 20, 0.75);
+
+  --kl-border-hairline: rgba(255, 255, 255, 0.08);
+  --kl-border-subtle: rgba(255, 255, 255, 0.12);
+  --kl-border-card: rgba(255, 255, 255, 0.08);
+  --kl-border-focus: rgba(16, 185, 129, 0.5);
+  --kl-border-active: #10B981;
+
+  --kl-text-primary: #FFFFFF;
+  --kl-text-secondary: rgba(255, 255, 255, 0.72);
+  --kl-text-muted: rgba(255, 255, 255, 0.5);
+  --kl-text-dim: rgba(255, 255, 255, 0.35);
+  --kl-ink: #FFFFFF;
+
+  --kl-accent: #10B981;
+  --kl-accent-hover: #059669;
+  --kl-accent-bg: rgba(16, 185, 129, 0.08);
+  --kl-accent-border: rgba(16, 185, 129, 0.25);
+  --kl-indigo: #6366F1;
+  --kl-indigo-bg: rgba(99, 102, 241, 0.08);
+  --kl-indigo-border: rgba(99, 102, 241, 0.25);
+
+  --kl-emerald: #10B981;
+  --kl-emerald-bg: rgba(16, 185, 129, 0.08);
+  --kl-emerald-border: rgba(16, 185, 129, 0.25);
+  --kl-emerald-glow: rgba(16, 185, 129, 0.25);
+
+  --kl-amber: #F59E0B;
+  --kl-amber-bg: rgba(245, 158, 11, 0.08);
+  --kl-amber-border: rgba(245, 158, 11, 0.25);
+
+  --kl-rose: #FB7185;
+  --kl-rose-bg: rgba(251, 113, 133, 0.08);
+  --kl-rose-border: rgba(251, 113, 133, 0.25);
+
+  --kl-sky: #38BDF8;
+  --kl-sky-bg: rgba(56, 189, 248, 0.08);
+  --kl-sky-border: rgba(56, 189, 248, 0.25);
+
+  --kl-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --kl-shadow-card: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --kl-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.7);
+  --kl-shadow-modal: 0 25px 70px rgba(0, 0, 0, 0.85);
+}
+
+/* Light Theme Variant */
+[data-theme="light"],
+.light {
+  --theme-mode: "light";
+
+  --kl-canvas: #F4F4F3;
+  --kl-canvas-subtle: #FAFAF9;
+  --kl-canvas-pure: #FFFFFF;
+  --kl-canvas-deep: #ECECEB;
+
+  --kl-surface-0: #FFFFFF;
+  --kl-surface-1: #ECECEB;
+  --kl-surface-2: #E5E5E3;
+  --kl-surface-3: #DEDEE1;
+  --kl-surface-4: #D2D2D6;
+  --kl-surface-card: #FFFFFF;
+  --kl-surface-card-subtle: #FAFAF9;
+
+  --kl-border-hairline: rgba(11, 11, 12, 0.08);
+  --kl-border-subtle: rgba(11, 11, 12, 0.12);
+  --kl-border-card: rgba(11, 11, 12, 0.08);
+  --kl-border-focus: rgba(91, 91, 214, 0.45);
+  --kl-border-active: #5B5BD6;
+
+  --kl-text-primary: #0B0B0C;
+  --kl-text-secondary: #6B6B70;
+  --kl-text-muted: #8E8E93;
+  --kl-text-dim: #AEAEB2;
+  --kl-ink: #0B0B0C;
+
+  --kl-accent: #5B5BD6;
+  --kl-accent-hover: #4B4BC4;
+  --kl-accent-bg: rgba(91, 91, 214, 0.08);
+  --kl-accent-border: rgba(91, 91, 214, 0.25);
+  --kl-indigo: #5B5BD6;
+  --kl-indigo-bg: rgba(91, 91, 214, 0.08);
+  --kl-indigo-border: rgba(91, 91, 214, 0.25);
+
+  --kl-emerald: #10B981;
+  --kl-emerald-bg: rgba(16, 185, 129, 0.08);
+  --kl-emerald-border: rgba(16, 185, 129, 0.25);
+
+  --kl-amber: #F59E0B;
+  --kl-amber-bg: rgba(245, 158, 11, 0.08);
+  --kl-amber-border: rgba(245, 158, 11, 0.25);
+
+  --kl-rose: #E11D48;
+  --kl-rose-bg: rgba(225, 29, 72, 0.08);
+  --kl-rose-border: rgba(225, 29, 72, 0.25);
+
+  --kl-sky: #0284C7;
+  --kl-sky-bg: rgba(2, 132, 199, 0.08);
+  --kl-sky-border: rgba(2, 132, 199, 0.25);
+
+  --kl-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --kl-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --kl-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+  --kl-shadow-modal: 0 25px 70px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   Marketing / Cinematic Theme (Near-black / Deep-navy)
+   Used by the public landing page & marketing surfaces
+   ========================================================================== */
+.marketing-theme,
+[data-theme="marketing"] {
+  --theme-mode: "dark";
+
+  /* Canvas: Near-black with deep-navy undertone */
+  --kl-canvas: #020408;
+  --kl-canvas-subtle: #050811;
+  --kl-canvas-deep: #070B14;
+  --kl-canvas-pure: #0B101D;
+
+  /* Surfaces */
+  --kl-surface-0: #050811;
+  --kl-surface-1: #070B14;
+  --kl-surface-2: #0B101D;
+  --kl-surface-card: rgba(10, 16, 29, 0.75);
+  --kl-surface-card-subtle: rgba(5, 8, 17, 0.6);
+
+  /* Hairline Borders */
+  --kl-border-hairline: rgba(255, 255, 255, 0.08);
+  --kl-border-subtle: rgba(255, 255, 255, 0.12);
+  --kl-border-card: rgba(255, 255, 255, 0.08);
+  --kl-border-focus: rgba(16, 185, 129, 0.5);
+  --kl-border-active: #10B981;
+
+  /* Typography: Cool-white ink */
+  --kl-text-primary: #FFFFFF;
+  --kl-text-secondary: rgba(255, 255, 255, 0.72);
+  --kl-text-muted: rgba(255, 255, 255, 0.5);
+  --kl-text-dim: rgba(255, 255, 255, 0.35);
+  --kl-ink: #FFFFFF;
+
+  /* Restrained Emerald Accent */
+  --kl-emerald: #10B981;
+  --kl-emerald-bg: rgba(16, 185, 129, 0.08);
+  --kl-emerald-border: rgba(16, 185, 129, 0.25);
+  --kl-emerald-glow: rgba(16, 185, 129, 0.2);
+
+  /* Cyan Highlight */
+  --kl-sky: #38BDF8;
+  --kl-sky-bg: rgba(56, 189, 248, 0.08);
+  --kl-sky-border: rgba(56, 189, 248, 0.25);
+
+  --kl-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --kl-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --kl-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.7);
+}

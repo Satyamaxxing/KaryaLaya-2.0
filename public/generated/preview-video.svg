@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 52" fill="none">
+  <!-- Video frame -->
+  <rect x="1" y="1" width="78" height="50" rx="4" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+  <!-- Clapperboard top -->
+  <rect x="1" y="1" width="78" height="14" rx="4" fill="rgba(167,139,250,0.1)"/>
+  <rect x="7" y="1" width="78" height="7" fill="rgba(167,139,250,0.08)"/>
+  <!-- Stripes -->
+  <line x1="12" y1="1" x2="8" y2="14" stroke="rgba(255,255,255,0.18)" stroke-width="2.5"/>
+  <line x1="22" y1="1" x2="18" y2="14" stroke="rgba(255,255,255,0.18)" stroke-width="2.5"/>
+  <line x1="32" y1="1" x2="28" y2="14" stroke="rgba(255,255,255,0.18)" stroke-width="2.5"/>
+  <line x1="42" y1="1" x2="38" y2="14" stroke="rgba(255,255,255,0.18)" stroke-width="2.5"/>
+  <line x1="52" y1="1" x2="48" y2="14" stroke="rgba(255,255,255,0.18)" stroke-width="2.5"/>
+  <!-- Timeline scrubber -->
+  <rect x="6" y="18" width="68" height="3" rx="1.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+  <rect x="6" y="18" width="42" height="3" rx="1.5" fill="rgba(167,139,250,0.35)"/>
+  <circle cx="48" cy="19.5" r="4" fill="rgba(167,139,250,0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+  <!-- Clip thumbnails -->
+  <rect x="6" y="25" width="20" height="14" rx="2" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.2)" stroke-width="0.5"/>
+  <rect x="28" y="25" width="20" height="14" rx="2" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.22)" stroke-width="0.5"/>
+  <rect x="50" y="25" width="24" height="14" rx="2" fill="rgba(167,139,250,0.08)" stroke="rgba(167,139,250,0.16)" stroke-width="0.5"/>
+  <!-- Play triangle -->
+  <path d="M14 30 L20 33 L14 36Z" fill="rgba(255,255,255,0.25)"/>
+  <!-- Waveform -->
+  <rect x="6" y="42" width="68" height="8" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <rect x="10" y="44" width="2" height="4" rx="1" fill="rgba(167,139,250,0.4)"/>
+  <rect x="14" y="43" width="2" height="6" rx="1" fill="rgba(167,139,250,0.5)"/>
+  <rect x="18" y="45" width="2" height="2" rx="1" fill="rgba(167,139,250,0.35)"/>
+  <rect x="22" y="43.5" width="2" height="5" rx="1" fill="rgba(167,139,250,0.45)"/>
+  <rect x="26" y="44" width="2" height="4" rx="1" fill="rgba(167,139,250,0.4)"/>
+  <rect x="30" y="42.5" width="2" height="7" rx="1" fill="rgba(167,139,250,0.55)"/>
+  <rect x="34" y="44" width="2" height="4" rx="1" fill="rgba(167,139,250,0.4)"/>
+  <rect x="38" y="45" width="2" height="2" rx="1" fill="rgba(167,139,250,0.3)"/>
+  <rect x="42" y="43" width="2" height="6" rx="1" fill="rgba(167,139,250,0.45)"/>
+  <rect x="46" y="44.5" width="2" height="3" rx="1" fill="rgba(167,139,250,0.38)"/>
+  <rect x="50" y="43" width="2" height="6" rx="1" fill="rgba(167,139,250,0.5)"/>
+  <rect x="54" y="44" width="2" height="4" rx="1" fill="rgba(167,139,250,0.4)"/>
+  <rect x="58" y="45" width="2" height="2" rx="1" fill="rgba(167,139,250,0.3)"/>
+  <rect x="62" y="44" width="2" height="4" rx="1" fill="rgba(167,139,250,0.4)"/>
+  <rect x="66" y="43.5" width="2" height="5" rx="1" fill="rgba(167,139,250,0.45)"/>
+</svg>

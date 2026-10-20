@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 52" fill="none">
+  <!-- Calendar frame -->
+  <rect x="1" y="1" width="78" height="50" rx="4" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+  <!-- Month header -->
+  <rect x="1" y="1" width="78" height="12" rx="4" fill="rgba(52,211,153,0.1)"/>
+  <rect x="7" y="1" width="78" height="6" fill="rgba(52,211,153,0.08)"/>
+  <!-- Header text placeholder -->
+  <rect x="26" y="4" width="28" height="4" rx="2" fill="rgba(255,255,255,0.12)"/>
+  <!-- Day labels -->
+  <rect x="6" y="15" width="8" height="3" rx="1" fill="rgba(255,255,255,0.12)"/>
+  <rect x="17" y="15" width="8" height="3" rx="1" fill="rgba(255,255,255,0.12)"/>
+  <rect x="28" y="15" width="8" height="3" rx="1" fill="rgba(255,255,255,0.12)"/>
+  <rect x="39" y="15" width="8" height="3" rx="1" fill="rgba(255,255,255,0.12)"/>
+  <rect x="50" y="15" width="8" height="3" rx="1" fill="rgba(52,211,153,0.4)"/>
+  <rect x="61" y="15" width="8" height="3" rx="1" fill="rgba(255,255,255,0.08)"/>
+  <!-- Week 1 dots -->
+  <circle cx="10" cy="24" r="2.5" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="21" cy="24" r="2.5" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="32" cy="24" r="2.5" fill="rgba(255,255,255,0.12)"/>
+  <circle cx="43" cy="24" r="2.5" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="54" cy="24" r="2.5" fill="rgba(52,211,153,0.7)" stroke="rgba(52,211,153,0.4)" stroke-width="0.5"/>
+  <circle cx="65" cy="24" r="2.5" fill="rgba(255,255,255,0.06)"/>
+  <!-- Week 2 dots -->
+  <circle cx="10" cy="33" r="2.5" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="21" cy="33" r="2.5" fill="rgba(52,211,153,0.25)"/>
+  <circle cx="32" cy="33" r="2.5" fill="rgba(52,211,153,0.25)"/>
+  <circle cx="43" cy="33" r="2.5" fill="rgba(52,211,153,0.25)"/>
+  <circle cx="54" cy="33" r="2.5" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="65" cy="33" r="2.5" fill="rgba(255,255,255,0.06)"/>
+  <!-- Week 2 event bar spanning 3 days -->
+  <rect x="18" y="31" width="28" height="5" rx="2.5" fill="rgba(52,211,153,0.18)" stroke="rgba(52,211,153,0.25)" stroke-width="0.5"/>
+  <!-- Week 3 dots -->
+  <circle cx="10" cy="42" r="2.5" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="21" cy="42" r="2.5" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="32" cy="42" r="2.5" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="43" cy="42" r="2.5" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="54" cy="42" r="2.5" fill="rgba(52,211,153,0.2)"/>
+  <circle cx="65" cy="42" r="2.5" fill="rgba(255,255,255,0.06)"/>
+</svg>
