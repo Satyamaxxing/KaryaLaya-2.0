@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentSession } from "@/server/auth";
 import { AgencyWorkService } from "@/server/services";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const user = await getCurrentSession();
   if (!user) {
