@@ -40,15 +40,18 @@ export default function LandingNavbar() {
     };
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll and pause Lenis when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
+      (window as any).lenis?.stop();
     } else {
       document.body.style.overflow = "";
+      (window as any).lenis?.start();
     }
     return () => {
       document.body.style.overflow = "";
+      (window as any).lenis?.start();
     };
   }, [mobileOpen]);
 

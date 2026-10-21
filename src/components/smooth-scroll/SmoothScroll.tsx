@@ -4,15 +4,15 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-
 import { usePathname } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Page-level smooth scroll matching the buttery-smooth feel of satyamaxxing.in.
- * Driven directly by a high-precision native requestAnimationFrame V-Sync loop,
- * seamlessly notifying GSAP ScrollTrigger on every scroll event.
+ * Driven directly by GSAP's V-Sync ticker loop with lagSmoothing(0),
+ * seamlessly notifying GSAP ScrollTrigger on every scroll frame.
+ * Includes syncTouch support for luxurious, fluid inertial scrolling on mobile.
  */
 export default function SmoothScroll() {
   const pathname = usePathname();
@@ -36,15 +36,18 @@ export default function SmoothScroll() {
     });
     ScrollTrigger.clearScrollMemory?.("manual");
 
-    // Touch devices keep native momentum scrolling (Lenis default: syncTouch off).
+    // Initialize Lenis with smooth wheel and syncTouch for silky smooth mobile touch scrolling
     const lenis = new Lenis({
       autoRaf: false,
       anchors: false, // We handle anchor clicks ourselves with fixed navbar offset
       duration: 1.15,
-      easing: (t) => 1 - Math.pow(1 - t, 3), // Exact cubic-out easing curve from satyamaxxing.in portfolio
+      easing: (t) => 1 - Math.pow(1 - t, 3), // Exact cubic-out easing curve
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.2,
+      syncTouch: true, // Enables smooth inertial momentum scrolling on mobile touch devices
+      syncTouchLerp: 0.08, // Buttery smooth deceleration on finger release
+      touchInertiaExponent: 1.5,
+      touchMultiplier: 1.0,
       infinite: false,
     });
 
@@ -54,13 +57,12 @@ export default function SmoothScroll() {
     // Synchronize Lenis with GSAP ScrollTrigger on every scroll frame
     lenis.on("scroll", ScrollTrigger.update);
 
-    // Dedicated high-precision native requestAnimationFrame loop (direct V-Sync, no ticker jitter)
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
+    // Drive Lenis via GSAP ticker for frame-locked synchronization
+    const updateLenis = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(updateLenis);
+    gsap.ticker.lagSmoothing(0);
 
     // Always reset to top (Hero section) on initial mount or page refresh
     if (window.location.hash) {
@@ -148,7 +150,7 @@ export default function SmoothScroll() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("pagehide", handleBeforeUnload);
       window.removeEventListener("resize", onResize);
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(updateLenis);
       lenis.destroy();
       delete (window as any).lenis;
     };
