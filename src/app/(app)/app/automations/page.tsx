@@ -356,7 +356,7 @@ export default function AutomationsPage() {
       )}
 
       {/* Header */}
-      <div className="bg-zinc-900/90 border border-zinc-850 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="bg-zinc-900/90 border border-zinc-850 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -423,7 +423,7 @@ export default function AutomationsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800 pb-2">
+      <div className="flex items-center gap-2 border-b border-zinc-800 pb-2 overflow-x-auto">
         <button
           onClick={() => setActiveTab("all")}
           className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
@@ -728,7 +728,10 @@ export default function AutomationsPage() {
       {/* Simple Rule Builder Modal */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 space-y-6">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-xl shadow-2xl p-4 sm:p-6 space-y-4 sm:space-y-6"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
               <div>
                 <h3 className="text-lg font-bold text-white">Create Automation Rule</h3>

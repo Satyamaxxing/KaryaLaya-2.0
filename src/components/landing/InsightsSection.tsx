@@ -2044,8 +2044,8 @@ export function InsightsSection() {
                   </div>
 
                   {/* Table Container */}
-                  <div style={{ overflowX: "auto" }}>
-                    <table style={{ width: "100%", textAlign: "left", fontSize: "11px", borderCollapse: "collapse" }}>
+                  <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+                    <table style={{ width: "100%", minWidth: "540px", textAlign: "left", fontSize: "11px", borderCollapse: "collapse" }}>
                       <thead>
                         <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.08)", fontSize: "10px", fontFamily: "monospace", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(255, 255, 255, 0.4)" }}>
                           <th style={{ paddingBottom: "8px", fontWeight: 400 }}>Deliverable</th>

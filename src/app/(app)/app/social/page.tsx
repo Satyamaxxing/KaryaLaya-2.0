@@ -585,7 +585,9 @@ export default function SocialMediaWorkspacePage() {
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-px bg-zinc-800 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
+          <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+            <div className="min-w-[680px]">
+              <div className="grid grid-cols-7 gap-px bg-zinc-800 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
               <div
                 key={dayName}
@@ -658,6 +660,8 @@ export default function SocialMediaWorkspacePage() {
                 </div>
               );
             })}
+              </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -736,8 +740,11 @@ export default function SocialMediaWorkspacePage() {
        * POST EDITOR MODAL WITH LIVE MOCKUP PREVIEW
        * ==================================================================== */}
       {isEditorOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-5xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-5xl w-full p-4 sm:p-8 space-y-6 shadow-2xl my-auto"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="text-lg font-bold text-white">
@@ -962,7 +969,10 @@ export default function SocialMediaWorkspacePage() {
        * ==================================================================== */}
       {isBulkModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="text-base font-bold text-white">Bulk 30-Day Monthly Plan</h3>
@@ -1032,7 +1042,10 @@ export default function SocialMediaWorkspacePage() {
        * ==================================================================== */}
       {isAccountModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="text-base font-bold text-white">Connect Client Social Channel</h3>

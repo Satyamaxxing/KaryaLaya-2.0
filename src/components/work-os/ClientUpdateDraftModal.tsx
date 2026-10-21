@@ -94,9 +94,12 @@ export function ClientUpdateDraftModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
+      <div
+        className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-2xl flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150"
+        style={{ maxHeight: "calc(100vh - 2rem)" }}
+      >
         {/* Header */}
-        <div className="p-5 border-b border-zinc-800 flex items-start justify-between bg-zinc-950/60">
+        <div className="p-4 sm:p-5 border-b border-zinc-800 flex items-start justify-between bg-zinc-950/60">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800/40 font-bold uppercase tracking-wider">
@@ -116,7 +119,7 @@ export function ClientUpdateDraftModal({
         </div>
 
         {/* Content */}
-        <div className="p-5 overflow-y-auto space-y-4 flex-1 text-xs">
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1 text-xs" style={{ WebkitOverflowScrolling: "touch" }}>
           {loading && (
             <div className="py-12 text-center space-y-3">
               <div className="inline-block w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />

@@ -39,7 +39,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
           backgroundColor: "#060913",
           border: "1px solid rgba(255, 255, 255, 0.08)",
           borderRadius: "1rem",
-          padding: "2.5rem 2rem",
+          padding: "clamp(1.5rem, 5vw, 2.5rem) clamp(1.25rem, 5vw, 2rem)",
           display: "flex",
           flexDirection: "column",
           gap: "1.5rem",

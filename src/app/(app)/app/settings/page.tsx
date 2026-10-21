@@ -42,7 +42,7 @@ export default function SettingsPage() {
           }}
         >
           <h2 style={{ fontSize: "14px", fontWeight: 600, color: "#fff" }}>Agency Profile</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: "1rem" }}>
             <div>
               <label
                 style={{

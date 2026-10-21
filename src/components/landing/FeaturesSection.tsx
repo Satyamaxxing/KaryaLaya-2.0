@@ -28,6 +28,7 @@ export interface Milestone {
 export interface WorkstreamBase {
   id: string;
   title: string;
+  shortTitle?: string;
   owner: string;
   dotColor: string;
   barLeft: number;
@@ -94,6 +95,7 @@ const WORKSTREAM_BASES: WorkstreamBase[] = [
   {
     id: "ws-1",
     title: "Landing Page Development",
+    shortTitle: "Landing Dev",
     owner: "Satyam",
     dotColor: "bg-cyan-400",
     barLeft: 6,
@@ -103,6 +105,7 @@ const WORKSTREAM_BASES: WorkstreamBase[] = [
   {
     id: "ws-2",
     title: "Launch Reel — V3",
+    shortTitle: "Launch Reel",
     owner: "Rishav",
     dotColor: "bg-rose-400",
     barLeft: 52,
@@ -112,6 +115,7 @@ const WORKSTREAM_BASES: WorkstreamBase[] = [
   {
     id: "ws-3",
     title: "Content Calendar",
+    shortTitle: "Content Cal",
     owner: "Aisha",
     dotColor: "bg-emerald-400",
     barLeft: 6,
@@ -121,6 +125,7 @@ const WORKSTREAM_BASES: WorkstreamBase[] = [
   {
     id: "ws-4",
     title: "Founder Brand Kit",
+    shortTitle: "Brand Kit",
     owner: "Arjun",
     dotColor: "bg-violet-400",
     barLeft: 52,
@@ -130,6 +135,7 @@ const WORKSTREAM_BASES: WorkstreamBase[] = [
   {
     id: "ws-5",
     title: "Client Portal Review",
+    shortTitle: "Client Review",
     owner: "Agency Gate",
     dotColor: "bg-amber-300",
     barLeft: 6,
@@ -139,6 +145,7 @@ const WORKSTREAM_BASES: WorkstreamBase[] = [
   {
     id: "ws-6",
     title: "Campaign Distribution",
+    shortTitle: "Campaign",
     owner: "Growth Team",
     dotColor: "bg-sky-300",
     barLeft: 52,
@@ -566,8 +573,11 @@ export function FeaturesSection() {
       const entranceTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 78%",
+          start: "top 85%",
           once: true, // Prevents flickering or repeated unwanted replays
+          onEnter: () => {
+            setHasEntered(true);
+          },
         },
         onComplete: () => {
           setHasEntered(true);
@@ -620,6 +630,24 @@ export function FeaturesSection() {
     sectionRef,
     []
   );
+
+  // Guarantee that workflow animations activate seamlessly on mobile touch/scroll
+  useEffect(() => {
+    if (hasEntered) return;
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting) {
+          setHasEntered(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasEntered]);
 
   // Helper to update SVG indicator dot position along the cubic Bézier curve
   const updateDotPosition = (x: number, y: number, color: string) => {
@@ -833,24 +861,112 @@ export function FeaturesSection() {
         .sec2-beam-sweep {
           animation: sec2BeamSweep 1.8s cubic-bezier(0.35, 0, 0.25, 1) infinite;
         }
+        .sec2-dashboard-card {
+          height: 350px;
+        }
+        .sec2-timeline-header {
+          height: 36px;
+        }
+        .sec2-month-banner {
+          height: 18px;
+        }
+        .sec2-date-row {
+          height: 18px;
+        }
+        .sec2-row-label {
+          top: 4px;
+          font-size: 8.5px;
+          line-height: 11px;
+        }
+        .sec2-gantt-bar {
+          top: 18px;
+          height: 13px;
+        }
+        @media (min-width: 640px) {
+          .sec2-dashboard-card {
+            height: 420px;
+          }
+          .sec2-timeline-header {
+            height: 54px;
+          }
+          .sec2-month-banner {
+            height: 26px;
+          }
+          .sec2-date-row {
+            height: 26px;
+          }
+          .sec2-row-label {
+            top: 6px;
+            font-size: 11px;
+            line-height: 14px;
+          }
+          .sec2-gantt-bar {
+            top: 24px;
+            height: 20px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .sec2-dashboard-card {
+            height: auto;
+            aspect-ratio: 16 / 9;
+          }
+          .sec2-timeline-header {
+            height: 70px;
+          }
+          .sec2-month-banner {
+            height: 32px;
+          }
+          .sec2-date-row {
+            height: 38px;
+          }
+          .sec2-row-label {
+            top: 13%;
+            font-size: 12.5px;
+            line-height: 16px;
+          }
+          .sec2-gantt-bar {
+            top: 40%;
+            height: 24px;
+          }
+        }
+        .sec2-mobile-only {
+          display: inline;
+        }
+        .sec2-desktop-only {
+          display: none;
+        }
+        .sec2-desktop-flex {
+          display: none;
+        }
+        @media (min-width: 640px) {
+          .sec2-mobile-only {
+            display: none !important;
+          }
+          .sec2-desktop-only {
+            display: inline !important;
+          }
+          .sec2-desktop-flex {
+            display: inline-flex !important;
+          }
+        }
       `}</style>
 
       <div className="max-w-[1400px] mx-auto px-[15px] lg:px-14">
         {/* Section Heading */}
-        <div className="relative mb-16 lg:mb-20">
+        <div className="relative mb-8 sm:mb-16 lg:mb-20">
           <div className="mx-0 lg:mx-5">
             <h2
               className="font-display tracking-tight"
               style={{
-                fontSize: "clamp(38px, 4.5vw, 60px)",
-                lineHeight: 1.02,
+                fontSize: "clamp(24px, 4.5vw, 72px)",
+                lineHeight: 1.08,
                 letterSpacing: "-0.025em",
               }}
             >
               <span className="sec2-headline-line block text-foreground">
                 Every project. One clear workflow.
               </span>
-              <span className="sec2-headline-line mt-2 block text-muted-foreground lg:mt-3.5">
+              <span className="sec2-headline-line mt-1.5 sm:mt-2 block text-muted-foreground lg:mt-3.5">
                 From scattered tasks to work that moves.
               </span>
             </h2>
@@ -859,9 +975,9 @@ export function FeaturesSection() {
           {/* Gantt Schedule Dashboard Card Container */}
           <div
             ref={cardRef}
-            className="sec2-dashboard-card relative mx-0 aspect-[1.05] w-full overflow-hidden rounded-xl border border-[#37333b] bg-[radial-gradient(circle_at_50%_0%,rgba(94,73,86,0.24),transparent_68%),linear-gradient(#09090c,#09090c)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.7)] [mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)] lg:mx-5 lg:aspect-video lg:w-[calc(100%-2.5rem)]"
+            className="sec2-dashboard-card relative mx-0 h-[360px] sm:h-[420px] lg:h-auto lg:aspect-video w-full overflow-hidden rounded-xl border border-[#37333b] bg-[radial-gradient(circle_at_50%_0%,rgba(94,73,86,0.24),transparent_68%),linear-gradient(#09090c,#09090c)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.7)] [mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_88%,transparent_100%)] lg:mx-5 lg:w-[calc(100%-2.5rem)]"
             style={{
-              marginTop: "clamp(3.5rem, 6vw, 5.5rem)",
+              marginTop: "clamp(1.75rem, 4.5vw, 5.5rem)",
             }}
           >
             {/* Top Hairline Ambient Shine Line */}
@@ -871,16 +987,16 @@ export function FeaturesSection() {
             />
 
             {/* Live Interactive Dashboard */}
-            <div className="flex h-full w-full overflow-hidden">
-              {/* Sidebar Preview (Subtly widened to 21.5% on desktop, 24% tablet, 28% mobile for comfortable breathing room) */}
+            <div className="flex h-full w-full items-stretch overflow-hidden">
+              {/* Sidebar Preview */}
               <aside
                 aria-label="Agency workflow scheduler sidebar"
-                className="sticky top-0 h-full w-[28%] sm:w-[24%] lg:w-[21.5%] shrink-0 self-start overflow-hidden border-r border-white/[0.06] bg-[#0c0d0f]/60 px-3 py-4 text-white/70 backdrop-blur-sm lg:px-5 lg:py-5"
+                className="sticky top-0 h-full w-[28%] sm:w-[24%] lg:w-[21.5%] shrink-0 self-stretch overflow-hidden border-r border-white/[0.06] bg-[#0c0d0f]/60 px-2 py-2.5 sm:px-3 sm:py-4 text-white/70 backdrop-blur-sm lg:px-5 lg:py-5 flex flex-col justify-between"
               >
                 {/* Brand Header */}
-                <div className="sec2-sidebar-item mb-5 lg:mb-6 flex items-center justify-between gap-1 sm:gap-2">
-                  <div className="flex min-w-0 items-center gap-2 font-medium text-white">
-                    <div className="relative size-5 shrink-0 overflow-hidden rounded-sm flex items-center justify-center">
+                <div className="sec2-sidebar-item mb-2.5 sm:mb-5 lg:mb-6 flex items-center justify-between gap-1 sm:gap-2">
+                  <div className="flex min-w-0 items-center gap-1.5 sm:gap-2 font-medium text-white">
+                    <div className="relative size-4 sm:size-5 shrink-0 overflow-hidden rounded-sm flex items-center justify-center">
                       <Image
                         src="/images/karyalaya-logo-mark.png"
                         alt="KaryaLaya"
@@ -889,20 +1005,20 @@ export function FeaturesSection() {
                         className="size-full object-contain"
                       />
                     </div>
-                    <span className="truncate text-xs sm:text-sm font-semibold tracking-tight text-white">
+                    <span className="truncate text-[11px] sm:text-xs lg:text-sm font-semibold tracking-tight text-white">
                       KaryaLaya
                     </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
+                      width="10"
+                      height="10"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="size-3 shrink-0 text-white/40"
+                      className="size-2.5 sm:size-3 shrink-0 text-white/40"
                     >
                       <path d="m6 9 6 6 6-6" />
                     </svg>
@@ -922,20 +1038,22 @@ export function FeaturesSection() {
                 </div>
 
                 {/* Primary Navigation Items */}
-                <nav className="space-y-1 text-sm">
-                  {SIDEBAR_NAV_ITEMS.map((item) => (
+                <nav className="space-y-0.5 sm:space-y-1 text-xs sm:text-sm">
+                  {SIDEBAR_NAV_ITEMS.map((item, idx) => (
                     <div
                       key={item.label}
-                      className={`sec2-sidebar-item group flex items-center gap-2 rounded-md px-2 py-1 transition-all duration-200 cursor-default select-none ${
+                      className={`sec2-sidebar-item group items-center gap-1.5 sm:gap-2 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 transition-all duration-200 cursor-default select-none ${
+                        idx >= 3 ? "hidden sm:flex" : "flex"
+                      } ${
                         item.active
-                          ? "-mx-2 border border-white/10 bg-white/[0.08] text-white shadow-[0_1px_4px_rgba(0,0,0,0.5)] pl-4"
+                          ? "-mx-1 sm:-mx-2 border border-white/10 bg-white/[0.08] text-white shadow-[0_1px_4px_rgba(0,0,0,0.5)] pl-2 sm:pl-4"
                           : "text-white/55 hover:bg-white/[0.04] hover:text-white/90"
                       }`}
                     >
                       <span className={item.active ? "text-cyan-400" : "text-white/45 group-hover:text-white/70"}>
                         {item.icon}
                       </span>
-                      <span className="truncate text-xs sm:text-sm font-medium tracking-tight">
+                      <span className="truncate text-[10px] sm:text-xs lg:text-sm font-medium tracking-tight">
                         {item.label}
                       </span>
                     </div>
@@ -943,27 +1061,27 @@ export function FeaturesSection() {
                 </nav>
 
                 {/* Active Campaign Project Group */}
-                <div className="sec2-sidebar-item mt-6 pt-4 border-t border-white/[0.06]">
-                  <p className="mb-2 flex items-center justify-between text-[10px] font-medium tracking-wider uppercase text-white/35">
+                <div className="sec2-sidebar-item mt-2 sm:mt-6 pt-2 sm:pt-4 border-t border-white/[0.06]">
+                  <p className="hidden sm:flex mb-2 items-center justify-between text-[10px] font-medium tracking-wider uppercase text-white/35">
                     <span>Campaign</span>
                     <svg className="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="m6 9 6 6 6-6" />
                     </svg>
                   </p>
-                  <div className="rounded-md border border-white/[0.06] bg-white/[0.02] p-2 transition-colors duration-500 hover:border-white/10">
-                    <p className="truncate text-xs font-medium text-white/90">
-                      Brand Growth Campaign
+                  <div className="rounded-md border border-white/[0.06] bg-white/[0.02] p-1.5 sm:p-2 transition-colors duration-500 hover:border-white/10">
+                    <p className="truncate text-[9px] sm:text-xs font-medium text-white/90">
+                      Brand Growth
                     </p>
-                    <p className="mt-0.5 font-mono text-[9px] text-emerald-400/90 flex items-center gap-1.5 transition-all duration-700">
-                      <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                    <p className="mt-0.5 font-mono text-[8px] sm:text-[9px] text-emerald-400/90 flex items-center gap-1 sm:gap-1.5 transition-all duration-700">
+                      <span className="size-1 sm:size-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                       <span key={simPhase} className="truncate inline-block sec2-text-glide">
-                        {simPhase === 0 && "4 workstreams · Live"}
-                        {simPhase === 1 && "Landing Dev · Approved"}
-                        {simPhase === 2 && "Launch Reel · V4 Sign-Off"}
-                        {simPhase === 3 && "Content · 30/30 Ready"}
-                        {simPhase === 4 && "Brand Kit · Exporting"}
-                        {simPhase === 5 && "Gate Sign-Off · 5/5 Ready"}
-                        {simPhase >= 6 && "Entire Workflow · Approved"}
+                        {simPhase === 0 && "Live"}
+                        {simPhase === 1 && "Dev OK"}
+                        {simPhase === 2 && "V4 OK"}
+                        {simPhase === 3 && "30/30"}
+                        {simPhase === 4 && "Brand Kit"}
+                        {simPhase === 5 && "5/5 Sign"}
+                        {simPhase >= 6 && "Approved"}
                       </span>
                     </p>
                   </div>
@@ -1034,10 +1152,10 @@ export function FeaturesSection() {
               </aside>
 
               {/* Gantt Timeline Area (flex-1 min-w-0) */}
-              <div className="flex-1 min-w-0 h-full p-[4px] sm:p-[5px] overflow-hidden">
+              <div className="flex-1 min-w-0 h-full flex flex-col p-[3px] sm:p-[5px] overflow-hidden self-stretch">
                 <section
                   aria-label="Agency workflow deliverable timeline Gantt chart"
-                  className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-[#101112] text-white/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
+                  className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-[#101112] text-white/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
                 >
                   {/* Dashed Timeline Grid Background Lines (7 Columns) */}
                   <svg
@@ -1056,22 +1174,22 @@ export function FeaturesSection() {
                   </svg>
 
                   {/* Header with Timeline Dates */}
-                  <header className="sec2-timeline-header relative z-10 h-[56px] sm:h-[64px] lg:h-[70px] shrink-0 border-b border-white/[0.04]">
+                  <header className="sec2-timeline-header relative z-10 shrink-0 border-b border-white/[0.04] overflow-hidden">
                     {/* Month Span Banner */}
-                    <div className="absolute inset-x-0 top-0 grid h-7 sm:h-8 grid-cols-7 items-end pb-1 text-[10px] font-medium tracking-[0.06em] text-white/32">
-                      <span className="col-span-5 pl-4">OCT</span>
-                      <span className="col-span-2 pl-4">NOV</span>
+                    <div className="sec2-month-banner absolute inset-x-0 top-0 grid grid-cols-7 items-end pb-0.5 sm:pb-1 text-[8px] sm:text-[9.5px] lg:text-[10px] font-medium tracking-[0.06em] text-white/32">
+                      <span className="col-span-5 pl-2 sm:pl-4">OCT</span>
+                      <span className="col-span-2 pl-2 sm:pl-4">NOV</span>
                     </div>
 
                     {/* Day Dates Columns */}
-                    <div className="absolute inset-x-0 bottom-0 grid h-8 sm:h-9 grid-cols-7 text-[9px] font-mono text-white/24">
-                      <div className="flex items-center pl-4">03</div>
-                      <div className="flex items-center pl-4">10</div>
-                      <div className="flex items-center pl-4">17</div>
-                      <div className="flex items-center pl-4 text-cyan-300/80 font-medium">24</div>
-                      <div className="flex items-center pl-4">31</div>
-                      <div className="flex items-center pl-4">07</div>
-                      <div className="flex items-center pl-4">14</div>
+                    <div className="sec2-date-row absolute inset-x-0 bottom-0 grid grid-cols-7 text-[7px] sm:text-[8.5px] lg:text-[9px] font-mono text-white/24">
+                      <div className="flex items-center pl-2 sm:pl-4">03</div>
+                      <div className="flex items-center pl-2 sm:pl-4">10</div>
+                      <div className="flex items-center pl-2 sm:pl-4">17</div>
+                      <div className="flex items-center pl-2 sm:pl-4 text-cyan-300/80 font-medium">24</div>
+                      <div className="flex items-center pl-2 sm:pl-4">31</div>
+                      <div className="flex items-center pl-2 sm:pl-4">07</div>
+                      <div className="flex items-center pl-2 sm:pl-4">14</div>
                     </div>
 
                     {/* Current Live Date Indicator Line (Oct 24) */}
@@ -1081,8 +1199,8 @@ export function FeaturesSection() {
                       style={{ left: "50%" }}
                     >
                       <div className="h-full w-px border-l border-dashed border-cyan-400/25" />
-                      <div className="absolute top-1.5 -translate-x-1/2 rounded bg-cyan-500/10 border border-cyan-400/25 px-1 py-0.5 text-[7px] font-mono text-cyan-300 whitespace-nowrap flex items-center gap-1 shadow-[0_0_8px_rgba(56,189,248,0.2)]">
-                        <span className="size-1 rounded-full bg-cyan-400 animate-pulse" />
+                      <div className="absolute top-0.5 sm:top-1 -translate-x-1/2 rounded bg-cyan-500/10 border border-cyan-400/25 px-1 py-0.2 text-[5.5px] sm:text-[7px] font-mono text-cyan-300 whitespace-nowrap flex items-center gap-0.5 sm:gap-1 shadow-[0_0_8px_rgba(56,189,248,0.2)]">
+                        <span className="size-0.5 sm:size-1 rounded-full bg-cyan-400 animate-pulse" />
                         LIVE
                       </div>
                     </div>
@@ -1306,18 +1424,18 @@ export function FeaturesSection() {
                         >
                           {/* Row Header & Metadata Label */}
                           <div
-                            className="absolute top-[13%] flex items-center gap-2 z-20 pointer-events-none"
+                            className="sec2-row-label absolute flex items-center gap-1 sm:gap-2 z-20 pointer-events-none"
                             style={{ left: `${ws.barLeft}%` }}
                           >
-                            <span className={`size-1.5 rounded-sm shrink-0 ${ws.dotColor}`} />
+                            <span className={`size-1 sm:size-1.5 rounded-sm shrink-0 ${ws.dotColor}`} />
                             <span
-                              className="font-semibold tracking-[-0.01em] text-white/90 whitespace-nowrap"
-                              style={{ fontSize: "12.5px" }}
+                              className="font-semibold tracking-[-0.01em] text-white/90 whitespace-nowrap text-[8.5px] sm:text-[11px] lg:text-[12.5px]"
                             >
-                              {ws.title} — {ws.owner}
+                              <span className="sec2-mobile-only">{ws.shortTitle || ws.title}</span>
+                              <span className="sec2-desktop-only">{ws.title} — {ws.owner}</span>
                             </span>
                             <span
-                              className="font-mono text-white/55 hidden sm:inline whitespace-nowrap"
+                              className="sec2-desktop-only font-mono text-white/55 whitespace-nowrap"
                               style={{ fontSize: "9.5px" }}
                             >
                               <span key={phaseState.meta} className="inline-block sec2-text-glide">
@@ -1325,18 +1443,20 @@ export function FeaturesSection() {
                               </span>
                             </span>
 
-                            {/* Ultra-Smooth Autonomous Status Micro-Badge */}
-                            <StatusBadge
-                              status={phaseState.status}
-                              badgeClass={phaseState.statusBadgeClass}
-                              dotClass={phaseState.statusDotClass}
-                              isAdvancing={isAdvancing}
-                            />
+                            {/* Ultra-Smooth Autonomous Status Micro-Badge (Hidden on mobile to eliminate clutter) */}
+                            <div className="sec2-desktop-flex">
+                              <StatusBadge
+                                status={phaseState.status}
+                                badgeClass={phaseState.statusBadgeClass}
+                                dotClass={phaseState.statusDotClass}
+                                isAdvancing={isAdvancing}
+                              />
+                            </div>
                           </div>
 
                           {/* Task Gantt Bar Container (Fixed 38% width, dark unfinished background visible) */}
                           <div
-                            className={`absolute top-[40%] h-[24px] rounded-md border bg-[#121316] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-500 ${
+                            className={`sec2-gantt-bar absolute rounded-[3px] sm:rounded-md border bg-[#121316] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-500 ${
                               isTaskCompleted
                                 ? "border-emerald-400/40 shadow-[0_0_12px_rgba(52,211,153,0.12)]"
                                 : isTaskActive
@@ -1355,7 +1475,7 @@ export function FeaturesSection() {
                               ref={(el) => {
                                 fillRefs.current[wsIdx] = el;
                               }}
-                              className="pointer-events-none absolute inset-y-0 left-0 overflow-hidden rounded-[5px]"
+                              className="pointer-events-none absolute inset-y-0 left-0 overflow-hidden rounded-[2px] sm:rounded-[5px]"
                               style={{
                                 width: "0%", // controlled by GSAP master timeline
                                 background: isTaskCompleted
@@ -1390,7 +1510,7 @@ export function FeaturesSection() {
                                 >
                                   {/* Diamond marker */}
                                   <span
-                                    className={`absolute left-0 top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 rotate-45 border transition-all duration-700 ease-out ${
+                                    className={`absolute left-0 top-1/2 size-1 sm:size-1.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border transition-all duration-700 ease-out ${
                                       isCompleted
                                         ? "border-emerald-400/90 bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.55)]"
                                         : isActive
@@ -1404,9 +1524,9 @@ export function FeaturesSection() {
                                     }
                                   />
 
-                                  {/* Milestone label underneath (top-[29px]) */}
+                                  {/* Milestone label underneath (top-[29px]) - hidden on mobile to eliminate overlap */}
                                   <span
-                                    className={`absolute left-0 top-[29px] -translate-x-1/2 whitespace-nowrap select-none transition-colors duration-700 ${
+                                    className={`hidden sm:inline absolute left-0 top-[29px] -translate-x-1/2 whitespace-nowrap select-none transition-colors duration-700 ${
                                       isCompleted
                                         ? "text-emerald-300/80 font-medium"
                                         : isActive
@@ -1431,8 +1551,8 @@ export function FeaturesSection() {
           </div>
         </div>
 
-        {/* Supporting Agency Workflow Pillars */}
-        <div className="mx-0 mt-10 lg:mt-12 grid gap-6 sm:gap-8 md:grid-cols-3 lg:mx-5 lg:gap-12">
+        {/* Supporting Agency Workflow Pillars (Preserved for desktop, hidden on mobile for clean UI) */}
+        <div className="hidden md:grid mx-0 mt-10 lg:mt-12 gap-6 sm:gap-8 md:grid-cols-3 lg:mx-5 lg:gap-12">
           {/* Card 1 */}
           <div className="sec2-pillar-card max-w-sm text-base leading-relaxed text-muted-foreground group">
             <p className="flex items-center gap-2 font-medium text-foreground text-sm lg:text-base">

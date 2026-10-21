@@ -1464,3 +1464,66 @@ textarea::placeholder {
   }
 }
 
+/* Sidebar Mobile Toggle (Hidden by default on desktop) */
+.sidebar-mobile-toggle {
+  display: none;
+}
+
+/* Responsive & Scroll Utilities */
+.overflow-x-auto {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.overflow-y-auto {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.right-2 { right: 0.5rem; }
+.right-4 { right: 1rem; }
+.left-2 { left: 0.5rem; }
+.left-4 { left: 1rem; }
+.w-96 { width: 24rem; }
+
+.min-w-\[220px\] { min-width: 220px; }
+.min-w-\[540px\] { min-width: 540px; }
+.min-w-\[560px\] { min-width: 560px; }
+.min-w-\[640px\] { min-width: 640px; }
+.min-w-\[680px\] { min-width: 680px; }
+.min-w-\[700px\] { min-width: 700px; }
+
+.max-h-\[750px\] { max-height: 750px; }
+.max-h-\[85vh\] { max-height: 85vh; }
+.max-h-\[90vh\] { max-height: 90vh; }
+
+@media (min-width: 640px) {
+  .sm\:left-auto {
+    left: auto;
+  }
+  .sm\:right-4 {
+    right: 1rem;
+  }
+  .sm\:w-96 {
+    width: 24rem;
+  }
+}
+
+/* Responsive App Cluster for Section 2 (scales gracefully on <380px) */
+@media (max-width: 380px) {
+  .live-os-cluster-box {
+    transform: scale(0.85);
+    transform-origin: center center;
+    margin: -10px auto;
+  }
+}
+@media (max-width: 330px) {
+  .live-os-cluster-box {
+    transform: scale(0.75);
+    transform-origin: center center;
+    margin: -20px auto;
+  }
+}
+

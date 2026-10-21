@@ -153,12 +153,15 @@ export function Sidebar({ isOpen, onCloseMobile }: SidebarProps) {
             <button
               onClick={onCloseMobile}
               style={{
-                background: "transparent",
-                border: "none",
+                background: "rgba(255, 255, 255, 0.06)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                borderRadius: "6px",
                 color: "var(--kl-text-muted)",
                 cursor: "pointer",
-                padding: "4px",
+                padding: "6px 10px",
                 display: "none",
+                fontSize: "13px",
+                lineHeight: 1,
               }}
               className="mobile-close-btn"
               aria-label="Close navigation"

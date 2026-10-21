@@ -219,7 +219,7 @@ export function TaskSidePanel({
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm flex justify-end animate-in fade-in duration-150">
       <div className="w-full max-w-xl bg-zinc-900 border-l border-zinc-800 h-full overflow-y-auto shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-200">
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Header */}
           <div className="flex items-start justify-between gap-4 border-b border-zinc-800 pb-4">
             <div>
@@ -595,7 +595,7 @@ export function TaskSidePanel({
 
         {/* Footer Actions */}
         {canEdit && (
-          <div className="p-6 border-t border-zinc-800 bg-zinc-950 flex items-center justify-between gap-3">
+          <div className="p-4 sm:p-6 border-t border-zinc-800 bg-zinc-950 flex items-center justify-between gap-3">
             <button
               onClick={() => handleUpdate()}
               disabled={saving}

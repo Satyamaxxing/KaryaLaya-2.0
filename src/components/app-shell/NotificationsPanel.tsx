@@ -174,7 +174,10 @@ export function NotificationsPanel({ isOpen, onClose }: NotificationsPanelProps)
 
       <div
         data-lenis-prevent
-        className="fixed top-14 right-4 z-50 w-96 max-w-[calc(100vw-2rem)] bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150"
+        className="fixed top-14 right-2 left-2 sm:left-auto sm:right-4 z-50 sm:w-96 max-w-[calc(100vw-1rem)] bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150"
+        style={{
+          maxHeight: "calc(100vh - 4.5rem)",
+        }}
       >
         {/* Top Header */}
         <div className="p-3 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/80">

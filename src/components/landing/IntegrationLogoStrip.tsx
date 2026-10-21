@@ -151,9 +151,6 @@ export default function IntegrationLogoStrip() {
           will-change: transform;
           transform: translateZ(0);
         }
-        .qronos-marquee-track:hover {
-          animation-play-state: paused;
-        }
         .qronos-icon-item:hover .qronos-marquee-svg {
           opacity: 1 !important;
           transform: scale(1.15) translateY(-3px);

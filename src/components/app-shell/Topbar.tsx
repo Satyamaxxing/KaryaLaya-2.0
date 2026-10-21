@@ -122,7 +122,7 @@ export function Topbar({
       <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={onToggleSidebar}
-          className="md:hidden p-1.5 rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
+          className="lg:hidden sidebar-mobile-toggle p-1.5 rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
           aria-label="Toggle navigation drawer"
         >
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">

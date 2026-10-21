@@ -419,8 +419,11 @@ export default function ProjectsCataloguePage() {
 
       {/* New Project Modal with Template Picker */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-2xl p-6 shadow-2xl space-y-5 my-8">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-2xl p-5 sm:p-6 shadow-2xl space-y-5 my-auto"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-white">Create Agency Project</h3>

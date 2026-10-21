@@ -39,7 +39,7 @@ export default function SignupPage() {
           backgroundColor: "rgba(10, 16, 29, 0.8)",
           border: "1px solid rgba(255, 255, 255, 0.1)",
           borderRadius: "1.25rem",
-          padding: "2.75rem 2.25rem",
+          padding: "clamp(1.5rem, 5vw, 2.75rem) clamp(1.25rem, 5vw, 2.25rem)",
           display: "flex",
           flexDirection: "column",
           gap: "1.5rem",

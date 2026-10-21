@@ -1220,7 +1220,7 @@ export default function ProjectWorkspacePage({
                 return (
                   <div
                     key={evt.id}
-                    className="p-3.5 bg-zinc-900/80 border border-zinc-800 rounded-xl flex items-center justify-between gap-3 text-xs hover:border-zinc-700 transition-colors"
+                    className="p-3.5 bg-zinc-900/80 border border-zinc-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 text-xs hover:border-zinc-700 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <span
@@ -1272,7 +1272,10 @@ export default function ProjectWorkspacePage({
        * ==================================================================== */}
       {isDeliverableModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-150">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg p-4 sm:p-6 shadow-2xl space-y-4 sm:space-y-5 animate-in fade-in zoom-in-95 duration-150"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-white">New Project Deliverable</h3>
@@ -1401,7 +1404,10 @@ export default function ProjectWorkspacePage({
        * ==================================================================== */}
       {isTaskModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-150">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md p-4 sm:p-6 shadow-2xl space-y-4 sm:space-y-5 animate-in fade-in zoom-in-95 duration-150"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-white">Add Task</h3>
@@ -1576,7 +1582,10 @@ export default function ProjectWorkspacePage({
        * ==================================================================== */}
       {isShareModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-md w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-base font-bold text-white flex items-center gap-2">

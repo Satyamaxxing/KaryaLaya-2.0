@@ -184,7 +184,7 @@ export default function ClientPortalHomePage() {
   return (
     <div className="min-h-screen bg-[#020408] text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-black">
       {/* Topbar */}
-      <header className="h-14 bg-[#050811]/90 backdrop-blur-md border-b border-white/10 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+      <header className="h-14 bg-[#050811]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-sky-400 flex items-center justify-center font-extrabold text-black text-xs shadow-md">
             {data.agency.name.slice(0, 2).toUpperCase()}
@@ -217,7 +217,7 @@ export default function ClientPortalHomePage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-5xl w-full mx-auto p-6 sm:p-8 space-y-6">
+      <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-8 space-y-6">
         {/* 1. Header: One line greeting + date */}
         <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
           <div>

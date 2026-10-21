@@ -26,169 +26,343 @@ export function KaryaLayaFooter() {
 
   return (
     <footer className="relative bg-black border-t border-white/10 text-white">
+      <style>{`
+        .kl-footer-container {
+          padding-top: 2.75rem;
+          padding-bottom: 2rem;
+        }
+        .kl-footer-main-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+        .kl-footer-brand-col {
+          margin-bottom: 1.75rem;
+        }
+        .kl-footer-desktop-links {
+          display: none !important;
+        }
+        .kl-footer-mobile-links {
+          display: block !important;
+        }
+        .kl-footer-link {
+          color: rgba(255, 255, 255, 0.55);
+          font-size: 13px;
+          line-height: 1.45;
+          padding: 2px 0;
+          transition: color 200ms ease;
+          display: inline-block;
+        }
+        .kl-footer-link:hover {
+          color: #34d399;
+        }
+        .kl-footer-bottom {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.875rem;
+          text-align: center;
+          padding-top: 1.5rem;
+          padding-bottom: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @media (min-width: 768px) {
+          .kl-footer-container {
+            padding-top: 4.5rem;
+            padding-bottom: 3.5rem;
+          }
+          .kl-footer-main-grid {
+            display: grid !important;
+            grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr !important;
+            gap: 2rem !important;
+          }
+          .kl-footer-brand-col {
+            margin-bottom: 0 !important;
+          }
+          .kl-footer-desktop-links {
+            display: contents !important;
+          }
+          .kl-footer-mobile-links {
+            display: none !important;
+          }
+          .kl-footer-bottom {
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            text-align: left !important;
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .kl-footer-container {
+            padding-top: 5rem;
+            padding-bottom: 4rem;
+          }
+          .kl-footer-main-grid {
+            gap: 2.5rem !important;
+          }
+        }
+      `}</style>
+
       <div className="relative z-10 max-w-[1400px] mx-auto px-[15px] lg:px-14">
-        <div className="py-16 lg:py-20">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-10 lg:gap-8">
-            {/* Brand column */}
-            <div className="col-span-2">
+        <div className="kl-footer-container">
+          <div className="kl-footer-main-grid">
+            {/* Brand column: rendered once, scales gracefully */}
+            <div className="kl-footer-brand-col">
               <InteractiveFooterLogo />
-              <p className="text-white/85 font-medium text-sm mb-2">
+              <p className="text-white/90 font-medium text-[13px] sm:text-sm mt-3 mb-1.5 tracking-tight">
                 The operating system for connected work.
               </p>
-              <p className="text-white/50 leading-relaxed mb-6 max-w-sm text-xs sm:text-sm">
+              <p className="text-zinc-400 leading-relaxed max-w-sm text-xs sm:text-sm">
                 Bring projects, deliverables, teams, client approvals, and workflows together in one workspace.
               </p>
             </div>
 
-            {/* Product Column */}
-            <div>
-              <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Product</h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm">
-                <li>
-                  <a
-                    href="#features"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
+            {/* Desktop Links (4 columns, rendered across the 5-column grid) */}
+            <div className="kl-footer-desktop-links">
+              {/* Product Column */}
+              <div>
+                <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Product</h3>
+                <ul className="space-y-3.5 text-xs sm:text-sm">
+                  <li>
+                    <a
+                      href="#features"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Projects &amp; Deliverables
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#how-it-works"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Team Collaboration
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#deadlines"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Deadlines &amp; Milestones
+                    </a>
+                  </li>
+                  <li>
+                    <Link
+                      href="/client"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Client Portal
+                    </Link>
+                  </li>
+                  <li>
+                    <a
+                      href="#automations"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      AI &amp; Automations
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#insights"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Insights &amp; Analytics
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Resources Column */}
+              <div>
+                <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Resources</h3>
+                <ul className="space-y-3.5 text-xs sm:text-sm">
+                  <li>
+                    <Link
+                      href="/signup"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Getting Started
+                    </Link>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:support@karyalaya.agency"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Help &amp; Support
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:hello@karyalaya.agency"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Contact
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Company Column */}
+              <div>
+                <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Company</h3>
+                <ul className="space-y-3.5 text-xs sm:text-sm">
+                  <li>
+                    <a
+                      href="#capabilities"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      About KaryaLaya
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:hello@karyalaya.agency"
+                      className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
+                    >
+                      Contact
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Legal Column */}
+              <div>
+                <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Legal</h3>
+                <ul className="space-y-3.5 text-xs sm:text-sm">
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModal("privacy")}
+                      className="text-left text-white/50 hover:text-emerald-400 transition-colors inline-block bg-transparent border-0 p-0 cursor-pointer"
+                    >
+                      Privacy Policy
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModal("terms")}
+                      className="text-left text-white/50 hover:text-emerald-400 transition-colors inline-block bg-transparent border-0 p-0 cursor-pointer"
+                    >
+                      Terms of Service
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Mobile Links: Clean, Symmetrical & Arranged Without Crowding */}
+            <div className="kl-footer-mobile-links">
+              {/* Product: Symmetrical 2-Column Grid */}
+              <div className="border-t border-white/[0.08] pt-5 pb-5">
+                <h3 className="text-[11px] font-mono uppercase tracking-[0.12em] text-white/45 mb-3.5 flex items-center gap-1.5">
+                  <span className="size-1 rounded-full bg-emerald-400" />
+                  Product
+                </h3>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
+                  <a href="#features" className="kl-footer-link">
                     Projects &amp; Deliverables
                   </a>
-                </li>
-                <li>
-                  <a
-                    href="#how-it-works"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    Team Collaboration
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#deadlines"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    Deadlines &amp; Milestones
-                  </a>
-                </li>
-                <li>
-                  <Link
-                    href="/client"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
+                  <Link href="/client" className="kl-footer-link">
                     Client Portal
                   </Link>
-                </li>
-                <li>
-                  <a
-                    href="#automations"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
+                  <a href="#how-it-works" className="kl-footer-link">
+                    Team Collaboration
+                  </a>
+                  <a href="#automations" className="kl-footer-link">
                     AI &amp; Automations
                   </a>
-                </li>
-                <li>
-                  <a
-                    href="#insights"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
+                  <a href="#deadlines" className="kl-footer-link">
+                    Deadlines &amp; Milestones
+                  </a>
+                  <a href="#insights" className="kl-footer-link">
                     Insights &amp; Analytics
                   </a>
-                </li>
-              </ul>
-            </div>
+                </div>
+              </div>
 
-            {/* Resources Column */}
-            <div>
-              <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Resources</h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm">
-                <li>
-                  <Link
-                    href="/signup"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    Getting Started
-                  </Link>
-                </li>
-                <li>
-                  <a
-                    href="mailto:support@karyalaya.agency"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    Help &amp; Support
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="mailto:hello@karyalaya.agency"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
+              {/* Resources & Company/Legal: Symmetrical 2 Columns */}
+              <div className="border-t border-white/[0.08] pt-5 pb-2 grid grid-cols-2 gap-x-4">
+                {/* Resources */}
+                <div>
+                  <h3 className="text-[11px] font-mono uppercase tracking-[0.12em] text-white/45 mb-3.5 flex items-center gap-1.5">
+                    <span className="size-1 rounded-full bg-cyan-400" />
+                    Resources
+                  </h3>
+                  <ul className="space-y-2.5">
+                    <li>
+                      <Link href="/signup" className="kl-footer-link">
+                        Getting Started
+                      </Link>
+                    </li>
+                    <li>
+                      <a href="mailto:support@karyalaya.agency" className="kl-footer-link">
+                        Help &amp; Support
+                      </a>
+                    </li>
+                    <li>
+                      <a href="mailto:hello@karyalaya.agency" className="kl-footer-link">
+                        Contact
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 
-            {/* Company Column */}
-            <div>
-              <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Company</h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm">
-                <li>
-                  <a
-                    href="#capabilities"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    About KaryaLaya
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="mailto:hello@karyalaya.agency"
-                    className="text-white/50 hover:text-emerald-400 transition-colors inline-block"
-                  >
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Legal Column */}
-            <div>
-              <h3 className="text-sm font-medium text-white mb-5 tracking-tight">Legal</h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm">
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("privacy")}
-                    className="text-left text-white/50 hover:text-emerald-400 transition-colors inline-block bg-transparent border-0 p-0 cursor-pointer"
-                  >
-                    Privacy Policy
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("terms")}
-                    className="text-left text-white/50 hover:text-emerald-400 transition-colors inline-block bg-transparent border-0 p-0 cursor-pointer"
-                  >
-                    Terms of Service
-                  </button>
-                </li>
-              </ul>
+                {/* Company & Legal */}
+                <div>
+                  <h3 className="text-[11px] font-mono uppercase tracking-[0.12em] text-white/45 mb-3.5 flex items-center gap-1.5">
+                    <span className="size-1 rounded-full bg-violet-400" />
+                    Company &amp; Legal
+                  </h3>
+                  <ul className="space-y-2.5">
+                    <li>
+                      <a href="#capabilities" className="kl-footer-link">
+                        About KaryaLaya
+                      </a>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => setActiveModal("privacy")}
+                        className="kl-footer-link text-left bg-transparent border-0 p-0 cursor-pointer"
+                      >
+                        Privacy Policy
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => setActiveModal("terms")}
+                        className="kl-footer-link text-left bg-transparent border-0 p-0 cursor-pointer"
+                      >
+                        Terms of Service
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar: Copyright & Live System Status */}
-        <div className="flex flex-col items-start justify-between gap-4 border-t border-white/10 py-8 md:flex-row md:items-center">
-          <p className="text-xs sm:text-sm text-white/40">
+        <div className="kl-footer-bottom">
+          <p className="text-xs text-white/40">
             © 2026 KaryaLaya. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-xs sm:text-sm text-white/40">
-            <span className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
-              </span>
-              All systems operational
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/[0.06] border border-emerald-500/20 text-[11px] font-mono text-emerald-300/90 shadow-[0_0_12px_rgba(52,211,153,0.06)]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
             </span>
+            All systems operational
           </div>
         </div>
       </div>
@@ -202,7 +376,8 @@ export function KaryaLayaFooter() {
           onClick={() => setActiveModal(null)}
         >
           <div
-            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-white/15 bg-[#0e1015] p-6 sm:p-8 text-white shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-white/15 bg-[#0e1015] p-5 sm:p-8 text-white shadow-2xl"
+            style={{ WebkitOverflowScrolling: "touch" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
@@ -252,8 +427,8 @@ export function KaryaLayaFooter() {
                   <p>
                     <strong className="text-white">4. Inquiries:</strong>{" "}
                     For any privacy or data handling inquiries, reach out directly to our security &amp; privacy team at{" "}
-                    <a href="mailto:support@karyalaya.agency" className="text-emerald-400 hover:underline">
-                      support@karyalaya.agency
+                    <a href="mailto:satyamggacc@gmail.com" className="text-emerald-400 hover:underline">
+                      satyamggacc@gmail.com
                     </a>.
                   </p>
                 </>

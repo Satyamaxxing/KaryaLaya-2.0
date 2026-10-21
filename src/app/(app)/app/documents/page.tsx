@@ -34,7 +34,7 @@ export default function DocumentsPage() {
           return (
             <div
               key={doc.id}
-              className="p-6 bg-zinc-900/80 border border-zinc-800 rounded-xl space-y-4 shadow-xl"
+              className="p-4 sm:p-6 bg-zinc-900/80 border border-zinc-800 rounded-xl space-y-4 shadow-xl"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">

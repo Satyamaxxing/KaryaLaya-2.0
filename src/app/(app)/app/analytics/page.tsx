@@ -76,7 +76,7 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-8">
       {/* Header Ribbon */}
-      <div className="bg-zinc-900/90 border border-zinc-850 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="bg-zinc-900/90 border border-zinc-850 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -270,7 +270,8 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl overflow-hidden text-xs">
-                <table className="w-full text-left">
+                <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+                  <table className="w-full min-w-[560px] text-left">
                   <thead className="bg-zinc-950/80 border-b border-zinc-800 text-zinc-400 font-mono">
                     <tr>
                       <th className="py-3 px-4">Deliverable</th>
@@ -320,6 +321,7 @@ export default function AnalyticsPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
             )}
           </div>
         )}
@@ -343,7 +345,8 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl overflow-hidden text-xs">
-                <table className="w-full text-left">
+                <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+                  <table className="w-full min-w-[560px] text-left">
                   <thead className="bg-zinc-950/80 border-b border-zinc-800 text-zinc-400 font-mono">
                     <tr>
                       <th className="py-3 px-4">Deliverable</th>
@@ -381,6 +384,7 @@ export default function AnalyticsPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
             )}
           </div>
         )}
@@ -546,7 +550,8 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl overflow-hidden text-xs">
-                <table className="w-full text-left">
+                <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+                  <table className="w-full min-w-[560px] text-left">
                   <thead className="bg-zinc-950/80 border-b border-zinc-800 text-zinc-400 font-mono">
                     <tr>
                       <th className="py-3 px-4">Member</th>
@@ -602,6 +607,7 @@ export default function AnalyticsPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
             )}
           </div>
         )}
@@ -625,7 +631,8 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl overflow-hidden text-xs">
-                <table className="w-full text-left">
+                <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+                  <table className="w-full min-w-[560px] text-left">
                   <thead className="bg-zinc-950/80 border-b border-zinc-800 text-zinc-400 font-mono">
                     <tr>
                       <th className="py-3 px-4">Client</th>
@@ -678,6 +685,7 @@ export default function AnalyticsPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
             )}
           </div>
         )}

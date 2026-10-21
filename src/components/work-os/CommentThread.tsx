@@ -228,7 +228,7 @@ export function CommentThread({
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-zinc-800">
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-white">{title}</span>
           <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">
@@ -438,7 +438,7 @@ export function CommentThread({
 
           {error && <div className="text-xs text-rose-400">{error}</div>}
 
-          <div className="flex items-center justify-between gap-3 pt-1">
+          <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
             <div className="flex items-center gap-2">
               <label className="text-[11px] text-zinc-400">Visibility:</label>
               <select

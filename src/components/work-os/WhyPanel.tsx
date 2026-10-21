@@ -20,7 +20,7 @@ export function WhyPanel({ insight, recommendation, onApprovePlan, onRejectPlan 
   return (
     <div className="bg-gradient-to-b from-indigo-950/40 via-zinc-900/90 to-zinc-950 border border-indigo-500/30 rounded-xl p-5 shadow-2xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 pb-4 border-b border-indigo-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-indigo-500/20">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-400/40 flex items-center justify-center text-indigo-400 text-sm">
             ✨
@@ -39,7 +39,7 @@ export function WhyPanel({ insight, recommendation, onApprovePlan, onRejectPlan 
         </div>
 
         {/* Level Selector Tabs */}
-        <div className="flex items-center bg-zinc-900/80 p-0.5 rounded-lg border border-zinc-800 text-xs">
+        <div className="flex flex-wrap items-center bg-zinc-900/80 p-0.5 rounded-lg border border-zinc-800 text-xs">
           <button
             onClick={() => setLevel(1)}
             className={`px-2.5 py-1 rounded transition-colors ${
@@ -176,7 +176,7 @@ export function WhyPanel({ insight, recommendation, onApprovePlan, onRejectPlan 
           </div>
 
           {/* Human Decision Buttons */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <div className="text-xs text-zinc-400 italic">
               {isExecuted ? (
                 <span className="text-emerald-400 font-medium not-italic flex items-center gap-1.5">
@@ -188,9 +188,9 @@ export function WhyPanel({ insight, recommendation, onApprovePlan, onRejectPlan 
             </div>
 
             {!isExecuted && onApprovePlan && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {isRejecting ? (
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <input
                       type="text"
                       placeholder="Reason for rejection..."

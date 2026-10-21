@@ -509,114 +509,160 @@ export default function InteractiveFooterLogo({
   return (
     <div
       ref={containerRef}
-      className="relative mb-6"
+      className="relative mb-4 sm:mb-6 kl-footer-logo-wrapper"
       style={{
         display: "inline-block",
         maxWidth: "100%",
-        // Preserves layout stability with exact bounding dimensions
-        minHeight: "clamp(64px, 8.5vw, 115px)",
       }}
     >
-      {/* 
-        EXPANDED UNCLIPPED CONTAINER
-        Both the particle canvas and the logo can render and move freely without container-level clipping.
-        Layout, footer, and adjacent columns remain 100% static and shift-free!
-      */}
-      <div
-        className="relative"
-        style={{
-          overflow: "visible",
-          minHeight: "clamp(64px, 8.5vw, 115px)",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {/* Background Particle Canvas (Behind the logo, z-index: 1) */}
-        <canvas
-          ref={canvasRef}
-          className="pointer-events-none"
-          style={{
-            zIndex: 1,
-          }}
-        />
-
-        {/* Shockwave Radial Burst (Triggered on click launch) */}
-        <div
-          ref={shockwaveRef}
-          aria-hidden="true"
-          className="absolute pointer-events-none rounded-full"
-          style={{
-            left: "35%",
-            top: "50%",
-            width: "120px",
-            height: "120px",
-            marginTop: "-60px",
-            marginLeft: "-60px",
-            background:
-              "radial-gradient(circle, rgba(52, 211, 153, 0.5) 0%, rgba(16, 185, 129, 0.2) 45%, transparent 75%)",
-            opacity: 0,
-            zIndex: 2,
-          }}
-        />
-
+      <style>{`
+        .kl-footer-logo-wrapper {
+          min-height: 40px;
+        }
+        .kl-footer-logo-box {
+          min-height: 40px;
+        }
+        .kl-footer-logo-btn {
+          gap: 0.625rem;
+        }
+        .kl-footer-logo-mark {
+          height: 38px;
+          width: auto;
+          display: block;
+          object-fit: contain;
+          flex-shrink: 0;
+        }
+        .kl-footer-logo-text {
+          height: 30px;
+          width: auto;
+          display: block;
+          object-fit: contain;
+          max-width: 100%;
+        }
+        @media (min-width: 640px) {
+          .kl-footer-logo-wrapper {
+            min-height: 52px;
+          }
+          .kl-footer-logo-box {
+            min-height: 52px;
+          }
+          .kl-footer-logo-btn {
+            gap: 0.875rem;
+          }
+          .kl-footer-logo-mark {
+            height: 52px;
+          }
+          .kl-footer-logo-text {
+            height: 44px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .kl-footer-logo-wrapper {
+            min-height: 54px;
+          }
+          .kl-footer-logo-box {
+            min-height: 54px;
+          }
+          .kl-footer-logo-btn {
+            gap: 1rem;
+          }
+          .kl-footer-logo-mark {
+            height: clamp(46px, 4.2vw, 60px);
+          }
+          .kl-footer-logo-text {
+            height: clamp(36px, 3.5vw, 48px);
+          }
+        }
+      `}</style>
         {/* 
-          STATIC / IN-FLOW LOGO LOCKUP
-          Hidden during 'falling' and 'missing', restored during 'restoring' and 'idle'.
-          Preserves its exact layout box in the footer at all times.
+          EXPANDED UNCLIPPED CONTAINER
+          Both the particle canvas and the logo can render and move freely without container-level clipping.
+          Layout, footer, and adjacent columns remain 100% static and shift-free!
         */}
-        <button
-          type="button"
-          ref={logoWrapperRef}
-          onClick={handleLaunch}
-          onKeyDown={handleLaunch}
-          onMouseEnter={handlePointerEnter}
-          onMouseLeave={handlePointerLeave}
-          onPointerEnter={handlePointerEnter}
-          onPointerLeave={handlePointerLeave}
-          className="inline-flex items-center gap-4 sm:gap-5 group transition-opacity select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/80 rounded-xl cursor-pointer"
+        <div
+          className="relative kl-footer-logo-box"
           style={{
-            position: "relative",
-            zIndex: 10,
-            background: "transparent",
-            border: "none",
-            padding: 0,
-            margin: 0,
-            textAlign: "left",
-            transformOrigin: "center center",
-            pointerEvents: state === "idle" ? "auto" : "none",
-            opacity: state === "falling" || state === "missing" ? 0 : 1,
-            visibility: state === "falling" || state === "missing" ? "hidden" : "visible",
+            overflow: "visible",
+            display: "flex",
+            alignItems: "center",
           }}
-          aria-label="KaryaLaya — Interactive physics logo (hover to charge, click to launch)"
         >
-          <img
-            src={logoMarkSrc}
-            alt="KaryaLaya Mark"
+          {/* Background Particle Canvas (Behind the logo, z-index: 1) */}
+          <canvas
+            ref={canvasRef}
+            className="pointer-events-none"
             style={{
-              height: "clamp(64px, 8.5vw, 115px)",
-              width: "auto",
-              display: "block",
-              objectFit: "contain",
-              flexShrink: 0,
-              filter:
-                isHovered && state === "idle"
-                  ? "drop-shadow(0 0 18px rgba(16, 185, 129, 0.65))"
-                  : "drop-shadow(0 0 6px rgba(255, 255, 255, 0.08))",
-              transition: "filter 350ms ease",
+              zIndex: 1,
             }}
           />
-          <img
-            src={logoTextSrc}
-            alt="KaryaLaya Text"
+
+          {/* Shockwave Radial Burst (Triggered on click launch) */}
+          <div
+            ref={shockwaveRef}
+            aria-hidden="true"
+            className="absolute pointer-events-none rounded-full"
             style={{
-              height: "clamp(54px, 7.5vw, 105px)",
-              width: "auto",
-              display: "block",
-              objectFit: "contain",
-              maxWidth: "100%",
+              left: "35%",
+              top: "50%",
+              width: "120px",
+              height: "120px",
+              marginTop: "-60px",
+              marginLeft: "-60px",
+              background:
+                "radial-gradient(circle, rgba(52, 211, 153, 0.5) 0%, rgba(16, 185, 129, 0.2) 45%, transparent 75%)",
+              opacity: 0,
+              zIndex: 2,
             }}
           />
-        </button>
+
+          {/* 
+            STATIC / IN-FLOW LOGO LOCKUP
+            Hidden during 'falling' and 'missing', restored during 'restoring' and 'idle'.
+            Preserves its exact layout box in the footer at all times.
+          */}
+          <button
+            type="button"
+            ref={logoWrapperRef}
+            onClick={handleLaunch}
+            onKeyDown={handleLaunch}
+            onMouseEnter={handlePointerEnter}
+            onMouseLeave={handlePointerLeave}
+            onPointerEnter={handlePointerEnter}
+            onPointerLeave={handlePointerLeave}
+            className="kl-footer-logo-btn inline-flex items-center group transition-opacity select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/80 rounded-xl cursor-pointer"
+            style={{
+              position: "relative",
+              zIndex: 10,
+              background: "transparent",
+              border: "none",
+              padding: 0,
+              margin: 0,
+              textAlign: "left",
+              transformOrigin: "center center",
+              pointerEvents: state === "idle" ? "auto" : "none",
+              opacity: state === "falling" || state === "missing" ? 0 : 1,
+              visibility: state === "falling" || state === "missing" ? "hidden" : "visible",
+            }}
+            aria-label="KaryaLaya — Interactive physics logo (hover to charge, click to launch)"
+          >
+            <img
+              src={logoMarkSrc}
+              alt="KaryaLaya Mark"
+              className="kl-footer-logo-mark"
+              style={{
+                filter:
+                  isHovered && state === "idle"
+                    ? "drop-shadow(0 0 18px rgba(16, 185, 129, 0.65))"
+                    : "drop-shadow(0 0 6px rgba(255, 255, 255, 0.08))",
+                transition: "filter 350ms ease",
+              }}
+            />
+            <img
+              src={logoTextSrc}
+              alt="KaryaLaya Text"
+              className="kl-footer-logo-text"
+            />
+          </button>
 
         {/* 
           EMPTY STATE REVEAL: "Bring the logo back ↗"

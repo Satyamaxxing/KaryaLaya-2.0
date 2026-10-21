@@ -350,10 +350,11 @@ export default function TeamPage() {
        * 3. RECORD LEAVE MODAL
        * ===================================================================== */}
       {showLeaveModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in">
           <form
             onSubmit={handleRecordLeave}
-            className="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4"
+            className="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 my-auto"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -460,10 +461,11 @@ export default function TeamPage() {
        * 4. INVITE MEMBER MODAL
        * ===================================================================== */}
       {showInviteModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in">
           <form
             onSubmit={handleInviteSubmit}
-            className="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4"
+            className="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 my-auto"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

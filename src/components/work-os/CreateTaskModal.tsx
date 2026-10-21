@@ -62,10 +62,21 @@ export function CreateTaskModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-zinc-900 border border-zinc-700 rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div
+        className="bg-zinc-900 border border-zinc-700 rounded-xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4"
+        style={{
+          maxHeight: "calc(100vh - 2rem)",
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
         <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
           <h2 className="text-base font-semibold text-white">Create New Task</h2>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white text-sm">
+          <button
+            onClick={onClose}
+            className="text-zinc-400 hover:text-white text-sm p-1.5 rounded-lg hover:bg-zinc-800 transition-colors"
+            aria-label="Close modal"
+          >
             ✕
           </button>
         </div>

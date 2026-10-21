@@ -40,6 +40,18 @@ export default function LandingNavbar() {
     };
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   return (
     <>
       <header
@@ -364,6 +376,7 @@ export default function LandingNavbar() {
       {/* Mobile Menu Drawer */}
       {mobileOpen && (
         <div
+          data-lenis-prevent
           style={{
             position: "fixed",
             inset: 0,
@@ -372,19 +385,21 @@ export default function LandingNavbar() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            padding: "6rem 2rem 3rem",
+            padding: "5.5rem 1.75rem 2.5rem",
             boxSizing: "border-box",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
             animation: "qronosFadeIn 250ms ease forwards",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "clamp(1.1rem, 2.8vh, 1.85rem)", margin: "auto 0" }}>
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
                 style={{
-                  fontSize: "2.25rem",
+                  fontSize: "clamp(1.6rem, 6.2vw, 2.25rem)",
                   color: "#ffffff",
                   textDecoration: "none",
                   fontWeight: 500,
@@ -399,11 +414,12 @@ export default function LandingNavbar() {
 
           <div
             style={{
-              paddingTop: "2rem",
+              paddingTop: "1.5rem",
               borderTop: "1px solid rgba(255, 255, 255, 0.15)",
               display: "flex",
               flexDirection: "column",
               gap: "0.75rem",
+              flexShrink: 0,
             }}
           >
             <Link

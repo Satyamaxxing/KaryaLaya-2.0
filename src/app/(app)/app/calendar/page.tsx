@@ -553,7 +553,9 @@ export default function CalendarPage() {
        * 3. CALENDAR GRID (Month & Week Views)
        * ===================================================================== */}
       <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
-        {/* Days of week header */}
+        <div className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+          <div className="min-w-[680px]">
+            {/* Days of week header */}
         <div className="grid grid-cols-7 border-b border-zinc-800 bg-zinc-950/70 text-center py-2.5 text-[11px] font-mono uppercase text-zinc-400 font-semibold">
           <span>Sun</span>
           <span>Mon</span>
@@ -625,6 +627,8 @@ export default function CalendarPage() {
             );
           })}
         </div>
+          </div>
+        </div>
       </div>
 
       {/* =====================================================================
@@ -632,7 +636,10 @@ export default function CalendarPage() {
        * ===================================================================== */}
       {activeEvent && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+          <div
+            className="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <span

@@ -241,7 +241,7 @@ export function FileAssetManager({
             return (
               <div
                 key={file.id}
-                className="p-3.5 bg-zinc-900/80 border border-zinc-800 rounded-xl flex items-center justify-between gap-4 hover:border-zinc-700 transition-colors"
+                className="p-3.5 bg-zinc-900/80 border border-zinc-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-zinc-700 transition-colors"
               >
                 {/* File info */}
                 <div className="flex items-center gap-3 min-w-0">
@@ -275,7 +275,7 @@ export function FileAssetManager({
                 </div>
 
                 {/* Badges & Actions */}
-                <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="flex items-center gap-2 flex-wrap sm:flex-shrink-0 self-end sm:self-auto">
                   {/* Visibility Badge & Explicit Toggle */}
                   <div className="flex items-center gap-1.5">
                     <span
@@ -333,7 +333,10 @@ export function FileAssetManager({
        * ==================================================================== */}
       {previewingFile && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-4xl overflow-hidden flex flex-col shadow-2xl animate-in fade-in zoom-in-95 duration-150"
+            style={{ maxHeight: "calc(100vh - 2rem)" }}
+          >
             <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/80">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-white truncate max-w-md">
@@ -398,7 +401,10 @@ export function FileAssetManager({
        * ==================================================================== */}
       {toggleConfirmFile && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md p-4 sm:p-6 shadow-2xl space-y-4"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <h4 className="text-base font-bold text-white">
               {targetVisibility === "CLIENT_VISIBLE"
                 ? "Publish File to Client Portal?"
@@ -445,7 +451,10 @@ export function FileAssetManager({
        * ==================================================================== */}
       {isUploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div
+            className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg p-4 sm:p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150"
+            style={{ maxHeight: "calc(100vh - 2rem)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
+          >
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <div>
                 <h3 className="text-base font-bold text-white">Upload Deliverable Asset</h3>
