@@ -3,13 +3,17 @@
 import React, { useEffect, useRef, useState } from "react";
 
 /**
- * Curzr Smooth Directional Arrow Pointer
- * - Solid black body with a crisp white stroke outline
- * - Directional rotation that dynamically points along the movement path
- * - Shortest-arc angle lerp & filtered velocity to eliminate jitter ("shaky shaky")
- * - Pinpointed tip alignment (transform-origin at 50% 9.375%)
- * - Frame-rate independent animation loop synced to requestAnimationFrame
- * - Auto-hidden over text inputs and disabled on touch devices
+ * Curzr Arrow Pointer
+ * Exact implementation based on Curzr library by Taylon Chan (fuzionix)
+ * Reference: https://codepen.io/fuzionix/pen/PoRWVRg / https://curzor.vercel.app/#/
+ *
+ * Characteristics:
+ * - Solid black body interior with crisp white stroke outline
+ * - Curzr signature directional rotation & cumulative angle displacement
+ * - 100ms transform easing transition (the core of Curzr's smooth gliding feel)
+ * - Click micro-scale bounce (scale 0.75)
+ * - Interactive hover scaling on links and buttons
+ * - Disabled on touch/mobile devices and hidden over editable text fields
  */
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -18,7 +22,7 @@ export default function CustomCursor() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Disable entirely on touch/coarse devices and reduced-motion
+    // Disable entirely on touch/coarse pointer devices and reduced motion
     const isTouch =
       window.matchMedia("(pointer: coarse)").matches ||
       !window.matchMedia("(hover: hover)").matches;
@@ -37,52 +41,78 @@ export default function CustomCursor() {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    const CURSOR_SIZE = 26;
-    // Arrow tip in 32x32 viewBox is at (16, 3)
-    const OFFSET_X = -CURSOR_SIZE / 2; // -13px
-    const OFFSET_Y = -CURSOR_SIZE * (3 / 32); // -2.4375px
+    const cursorSize = 22;
+    const degrees = 57.296; // 180 / Math.PI
 
-    let targetX = window.innerWidth / 2;
-    let targetY = window.innerHeight / 2;
-    let currentX = targetX;
-    let currentY = targetY;
+    const position = {
+      distanceX: 0,
+      distanceY: 0,
+      distance: 0,
+      pointerX: window.innerWidth / 2,
+      pointerY: window.innerHeight / 2,
+    };
 
-    let prevRawX = targetX;
-    let prevRawY = targetY;
-    let filteredDx = 0;
-    let filteredDy = 0;
-
-    let targetAngle = 0;
-    let currentAngle = 0;
-
-    let targetScale = 1;
-    let currentScale = 1;
+    let previousPointerX = position.pointerX;
+    let previousPointerY = position.pointerY;
+    let angle = 0;
+    let previousAngle = 0;
+    let angleDisplace = 0;
 
     let isVisible = false;
     let isHovering = false;
     let isClicking = false;
     let isOverEditable = false;
 
-    let animationFrameId: number;
-    let lastTime = performance.now();
+    // Curzr native rotation calculation
+    const rotate = () => {
+      const unsortedAngle =
+        Math.atan(Math.abs(position.distanceY) / Math.abs(position.distanceX)) * degrees;
+      previousAngle = angle;
 
-    const onPointerMove = (e: MouseEvent) => {
-      const rawDx = e.clientX - prevRawX;
-      const rawDy = e.clientY - prevRawY;
-      prevRawX = e.clientX;
-      prevRawY = e.clientY;
+      if (position.distanceX <= 0 && position.distanceY >= 0) {
+        angle = 90 - unsortedAngle;
+      } else if (position.distanceX < 0 && position.distanceY < 0) {
+        angle = unsortedAngle + 90;
+      } else if (position.distanceX >= 0 && position.distanceY <= 0) {
+        angle = 90 - unsortedAngle + 180;
+      } else if (position.distanceX > 0 && position.distanceY > 0) {
+        angle = unsortedAngle + 270;
+      }
 
-      targetX = e.clientX;
-      targetY = e.clientY;
+      if (isNaN(angle)) {
+        angle = previousAngle;
+      } else {
+        if (angle - previousAngle <= -270) {
+          angleDisplace += 360 + angle - previousAngle;
+        } else if (angle - previousAngle >= 270) {
+          angleDisplace += angle - previousAngle - 360;
+        } else {
+          angleDisplace += angle - previousAngle;
+        }
+      }
+    };
+
+    const updateTransform = () => {
+      const scale = isClicking ? 0.75 : isHovering ? 1.15 : 1;
+      cursor.style.transform = `translate3d(${position.pointerX}px, ${position.pointerY}px, 0) rotate(${angleDisplace}deg) scale(${scale})`;
+    };
+
+    const move = (e: MouseEvent) => {
+      previousPointerX = position.pointerX;
+      previousPointerY = position.pointerY;
+      position.pointerX = e.clientX;
+      position.pointerY = e.clientY;
+      position.distanceX = previousPointerX - position.pointerX;
+      position.distanceY = previousPointerY - position.pointerY;
+      position.distance = Math.sqrt(
+        position.distanceY * position.distanceY + position.distanceX * position.distanceX
+      );
 
       if (!isVisible) {
         isVisible = true;
-        currentX = targetX;
-        currentY = targetY;
         cursor.style.opacity = "1";
       }
 
-      // Check if cursor is over form/editable elements
       const target = e.target as HTMLElement | null;
       if (target) {
         const editable = target.closest("input, textarea, select, [contenteditable='true']");
@@ -100,27 +130,21 @@ export default function CustomCursor() {
         isHovering = !!interactive && !isOverEditable;
       }
 
-      // Exponential moving average filter on displacement vector to eliminate sensor/pixel noise
-      const alpha = 0.35;
-      filteredDx = filteredDx * (1 - alpha) + rawDx * alpha;
-      filteredDy = filteredDy * (1 - alpha) + rawDy * alpha;
-
-      const speed = Math.hypot(filteredDx, filteredDy);
-
-      // Only update target heading if intentional movement occurs (> 1.2px)
-      // This prevents micro-jitter and shaking when moving slowly or resting
-      if (speed > 1.2) {
-        // SVG arrow points UP (towards -Y) at 0 deg, so atan2 + 90 deg gives exact heading
-        targetAngle = (Math.atan2(filteredDy, filteredDx) * 180) / Math.PI + 90;
+      if (position.distance > 1) {
+        rotate();
       }
+
+      updateTransform();
     };
 
     const onMouseDown = () => {
       isClicking = true;
+      updateTransform();
     };
 
     const onMouseUp = () => {
       isClicking = false;
+      updateTransform();
     };
 
     const onMouseLeave = () => {
@@ -135,54 +159,20 @@ export default function CustomCursor() {
       }
     };
 
-    // Frame-rate independent render loop
-    const render = (time: number) => {
-      const dt = Math.min((time - lastTime) / 1000, 0.1);
-      lastTime = time;
-
-      // Position: locked directly to pointer tip for zero input latency
-      currentX = targetX;
-      currentY = targetY;
-
-      // Shortest-arc angle interpolation (never does 360 degree spin flips)
-      let diff = (targetAngle - currentAngle) % 360;
-      if (diff < -180) diff += 360;
-      if (diff > 180) diff -= 360;
-
-      // Ultra-smooth exponential decay rotation (higher response without jitter)
-      const rotFactor = 1 - Math.exp(-22 * dt);
-      currentAngle += diff * rotFactor;
-
-      // Smooth interactive scaling
-      targetScale = isClicking ? 0.78 : isHovering ? 1.18 : 1;
-      const scaleFactor = 1 - Math.exp(-20 * dt);
-      currentScale += (targetScale - currentScale) * scaleFactor;
-
-      const posX = currentX + OFFSET_X;
-      const posY = currentY + OFFSET_Y;
-
-      cursor.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0) rotate(${currentAngle.toFixed(2)}deg) scale(${currentScale.toFixed(3)})`;
-
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    window.addEventListener("mousemove", onPointerMove, { passive: true });
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("mousemove", move, { passive: true });
     window.addEventListener("pointerdown", onMouseDown, { passive: true });
     window.addEventListener("pointerup", onMouseUp, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("mouseenter", onMouseEnter);
 
-    animationFrameId = requestAnimationFrame(render);
-
     return () => {
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("mousemove", onPointerMove);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("mousemove", move);
       window.removeEventListener("pointerdown", onMouseDown);
       window.removeEventListener("pointerup", onMouseUp);
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("mouseenter", onMouseEnter);
-      cancelAnimationFrame(animationFrameId);
     };
   }, [mounted]);
 
@@ -200,19 +190,20 @@ export default function CustomCursor() {
           }
         }
         .curzr-arrow-pointer {
+          box-sizing: border-box;
           position: fixed;
-          top: 0;
-          left: 0;
-          width: 26px;
-          height: 26px;
+          top: -2.06px;
+          left: -11px;
+          width: 22px;
+          height: 22px;
           z-index: 2147483647;
-          pointer-events: none;
           user-select: none;
+          pointer-events: none;
           transform-origin: 50% 9.375%;
           will-change: transform;
           opacity: 0;
-          transition: opacity 150ms ease;
-          filter: drop-shadow(0 2px 7px rgba(0, 0, 0, 0.75));
+          transition: opacity 250ms ease, transform 100ms ease-out;
+          filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
         }
         .curzr-arrow-pointer svg {
           width: 100%;
