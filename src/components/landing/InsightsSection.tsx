@@ -858,7 +858,7 @@ export function InsightsSection() {
               }}
             >
               <span className="insights-title-line" style={{ display: "block", color: "#ffffff" }}>
-                Track your work.
+                Make every update count.
               </span>
               <span
                 className="insights-title-line"
@@ -868,7 +868,7 @@ export function InsightsSection() {
                   color: "rgba(255, 255, 255, 0.6)",
                 }}
               >
-                Understand your progress.
+                See project progress and spot delays early.
               </span>
             </h2>
           </div>

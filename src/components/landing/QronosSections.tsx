@@ -323,10 +323,10 @@ export function HowItWorksSection() {
               }}
             >
               <span className="sec3-line-1 block text-foreground will-change-transform">
-                Work stays connected.
+                Stay in control of your work.
               </span>
               <span className="sec3-line-2 mt-2 block text-muted-foreground lg:mt-3.5 will-change-transform">
-                Nothing falls out of sync.
+                Keep your team and clients connected.
               </span>
             </h2>
           </div>

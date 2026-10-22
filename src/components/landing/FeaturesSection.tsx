@@ -985,10 +985,10 @@ export function FeaturesSection() {
               }}
             >
               <span className="sec2-headline-line block text-foreground">
-                Every project. One clear workflow.
+                You&apos;ve got projects to deliver.
               </span>
               <span className="sec2-headline-line mt-1.5 sm:mt-2 block text-muted-foreground lg:mt-3.5">
-                From scattered tasks to work that moves.
+                Not deadlines to chase across five apps.
               </span>
             </h2>
           </div>
