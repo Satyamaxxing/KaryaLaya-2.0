@@ -186,11 +186,18 @@ export default function InteractiveFooterLogo({
     const dpr = window.devicePixelRatio || 1;
     const clientWidth = document.documentElement.clientWidth || window.innerWidth;
 
-    // Canvas spans the full viewport width and ~950px height (-420px above to +450px below)
+    const footerEl = container.closest("footer");
+    const footerRect = footerEl ? footerEl.getBoundingClientRect() : null;
+
+    // Confine canvas strictly to footer bounds so it never leaks beyond the page or creates extra scroll height
     const offsetX = rect.left;
-    const offsetY = 420;
+    const offsetY = footerRect ? Math.max(0, rect.top - footerRect.top) : 80;
+    const availableBelow = footerRect
+      ? Math.max(0, footerRect.bottom - rect.bottom)
+      : rect.height;
+
     const canvasWidth = clientWidth;
-    const canvasHeight = rect.height + offsetY + 450;
+    const canvasHeight = Math.max(10, rect.height + offsetY + availableBelow);
 
     canvas.style.position = "absolute";
     canvas.style.left = `${-offsetX}px`;

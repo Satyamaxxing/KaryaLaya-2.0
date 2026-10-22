@@ -25,7 +25,7 @@ export function KaryaLayaFooter() {
   }, [activeModal]);
 
   return (
-    <footer className="relative bg-black border-t border-white/10 text-white">
+    <footer className="relative bg-black border-t border-white/10 text-white overflow-hidden">
       <style>{`
         .kl-footer-container {
           padding-top: 2.75rem;
@@ -357,13 +357,30 @@ export function KaryaLayaFooter() {
           <p className="text-xs text-white/40">
             © 2026 KaryaLaya. All rights reserved.
           </p>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/[0.06] border border-emerald-500/20 text-[11px] font-mono text-emerald-300/90 shadow-[0_0_12px_rgba(52,211,153,0.06)]">
+          <a
+            href="https://www.google.com/search?q=Satyamaxxing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-emerald-500/30 text-xs text-zinc-400 hover:text-zinc-200 transition-all duration-200 backdrop-blur-sm cursor-pointer shadow-sm hover:shadow-[0_0_20px_rgba(16,185,129,0.12)]"
+            aria-label="Made by Satyamaxxing (opens Google search in new tab)"
+          >
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
-            All systems operational
-          </div>
+            <span className="text-zinc-400 group-hover:text-zinc-300 transition-colors">
+              Made by <span className="font-medium text-white group-hover:text-emerald-300 transition-colors">Satyamaxxing</span>
+            </span>
+            <svg
+              className="w-3 h-3 text-zinc-500 group-hover:text-emerald-400 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
+          </a>
         </div>
       </div>
 

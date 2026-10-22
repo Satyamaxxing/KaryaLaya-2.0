@@ -13,7 +13,7 @@ const DEFAULT_REPEL_OPTIONS = { radius: 60, strength: 10 };
 
 const TAU = 2 * Math.PI;
 const FRAME_DURATION = 1 / 60;
-const POINTS_PER_STRAND = 90;
+const POINTS_PER_STRAND = 200;
 const SEGMENTS_PER_STRAND = POINTS_PER_STRAND - 1;
 
 function clamp(val: number, min: number, max: number): number {
@@ -255,8 +255,6 @@ export default function VortexBackground({
       to: number;
       bright: number;
       offset: number;
-      pts: Float32Array;
-      cols: Float32Array;
     }
 
     interface Comet {
@@ -459,9 +457,9 @@ export default function VortexBackground({
       updateColors(cfg);
 
       const lineTotal = Math.max(3, Math.round(cfg.lineCount));
-      const totalSegments = SEGMENTS_PER_STRAND * lineTotal * 2;
-      linePositions = new Float32Array(totalSegments * 3);
-      lineColors = new Float32Array(totalSegments * 3);
+      const totalVertices = lineTotal * POINTS_PER_STRAND;
+      linePositions = new Float32Array(totalVertices * 3);
+      lineColors = new Float32Array(totalVertices * 3);
 
       lineGeometry = track(new THREE.BufferGeometry());
       const posAttr = new THREE.BufferAttribute(linePositions, 3);
@@ -470,6 +468,19 @@ export default function VortexBackground({
       colAttr.setUsage(THREE.DynamicDrawUsage);
       lineGeometry.setAttribute("position", posAttr);
       lineGeometry.setAttribute("color", colAttr);
+
+      // Pre-compute static index buffer for all strands
+      const totalIndices = lineTotal * SEGMENTS_PER_STRAND * 2;
+      const indices = totalVertices > 65535 ? new Uint32Array(totalIndices) : new Uint16Array(totalIndices);
+      let idx = 0;
+      for (let i = 0; i < lineTotal; i++) {
+        const base = i * POINTS_PER_STRAND;
+        for (let p = 0; p < SEGMENTS_PER_STRAND; p++) {
+          indices[idx++] = base + p;
+          indices[idx++] = base + p + 1;
+        }
+      }
+      lineGeometry.setIndex(new THREE.BufferAttribute(indices, 1));
 
       const lineMat = track(
         injectRepelShader(
@@ -497,9 +508,7 @@ export default function VortexBackground({
           from: 0,
           to: 1,
           bright: 0.5,
-          offset: SEGMENTS_PER_STRAND * i * 6,
-          pts: new Float32Array(POINTS_PER_STRAND * 3),
-          cols: new Float32Array(POINTS_PER_STRAND * 3),
+          offset: i * POINTS_PER_STRAND * 3,
         });
       }
 
@@ -760,14 +769,14 @@ export default function VortexBackground({
             Math.min(3 * introLines, 1);
           const cProg = strand.from + introLines * (strand.to - strand.from);
           const uProg = 0.15 * (strand.to - strand.from);
-          const { pts, cols } = strand;
+          const baseOffset = strand.offset;
 
           for (let pIdx = 0; pIdx < POINTS_PER_STRAND; pIdx++) {
             const nProg = pIdx / SEGMENTS_PER_STRAND;
             const aProg = strand.from + nProg * (strand.to - strand.from);
-            const o3 = 3 * pIdx;
+            const o3 = baseOffset + 3 * pIdx;
 
-            splineHelpers.writePoint(pts, o3, aProg, strand.lane, strandFlow, 0.008, strand.wobblePhase, elapsed);
+            splineHelpers.writePoint(linePositions, o3, aProg, strand.lane, strandFlow, 0.008, strand.wobblePhase, elapsed);
 
             if (hasActiveShockwaves) {
               let sx = 0, sy = 0, sz = 0, anyActive = false;
@@ -777,9 +786,9 @@ export default function VortexBackground({
                 const c = elapsed - a.at;
                 if (c > 2.5) { a.active = false; continue; }
                 anyActive = true;
-                const dx = pts[o3] - a.x;
-                const dy = pts[o3 + 1] - a.y;
-                const dz = pts[o3 + 2] - a.z;
+                const dx = linePositions[o3] - a.x;
+                const dy = linePositions[o3 + 1] - a.y;
+                const dz = linePositions[o3 + 2] - a.z;
                 const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
                 if (dist < 0.001 || dist > 3.0) continue;
                 const m = Math.abs(dist - 5.0 * c);
@@ -793,9 +802,9 @@ export default function VortexBackground({
                 sz += (dz / dist) * force;
               }
               if (!anyActive) hasActiveShockwaves = false;
-              pts[o3] += sx;
-              pts[o3 + 1] += sy;
-              pts[o3 + 2] += sz;
+              linePositions[o3] += sx;
+              linePositions[o3 + 1] += sy;
+              linePositions[o3 + 2] += sz;
             }
 
             let pFade = 1;
@@ -815,29 +824,9 @@ export default function VortexBackground({
             }
 
             const intensity = pFade * lMul * fGrowth * pulseTerm;
-            cols[o3] = colors.strand.r * intensity;
-            cols[o3 + 1] = colors.strand.g * intensity;
-            cols[o3 + 2] = colors.strand.b * intensity;
-          }
-
-          let bOffset = strand.offset;
-          for (let seg = 0; seg < SEGMENTS_PER_STRAND; seg++) {
-            const i1 = 3 * seg;
-            const i2 = (seg + 1) * 3;
-            linePositions[bOffset] = pts[i1];
-            linePositions[bOffset + 1] = pts[i1 + 1];
-            linePositions[bOffset + 2] = pts[i1 + 2];
-            lineColors[bOffset] = cols[i1];
-            lineColors[bOffset + 1] = cols[i1 + 1];
-            lineColors[bOffset + 2] = cols[i1 + 2];
-
-            linePositions[bOffset + 3] = pts[i2];
-            linePositions[bOffset + 4] = pts[i2 + 1];
-            linePositions[bOffset + 5] = pts[i2 + 2];
-            lineColors[bOffset + 3] = cols[i2];
-            lineColors[bOffset + 4] = cols[i2 + 1];
-            lineColors[bOffset + 5] = cols[i2 + 2];
-            bOffset += 6;
+            lineColors[o3] = colors.strand.r * intensity;
+            lineColors[o3 + 1] = colors.strand.g * intensity;
+            lineColors[o3 + 2] = colors.strand.b * intensity;
           }
         }
         lineGeometry.attributes.position.needsUpdate = true;

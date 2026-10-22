@@ -124,8 +124,8 @@ export default function HomePage() {
           >
             <VortexBackground
               background="#000000"
-              lineOptions={{ color: "#ffffff", glow: 8.5, count: 120 }}
-              dotOptions={{ color: "#ffffff", glow: 11, count: 850 }}
+              lineOptions={{ color: "#ffffff", glow: 8.5, count: 80 }}
+              dotOptions={{ color: "#ffffff", glow: 11, count: 350 }}
               cometOptions={{ color: "#eca8d6", glow: 7 }}
               repel={true}
             />
