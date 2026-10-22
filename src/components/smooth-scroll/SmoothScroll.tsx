@@ -18,6 +18,19 @@ export default function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Bypass smooth scroll on auth (/login, /signup, /invite) and dashboard (/app, /client)
+    // so fixed-height split layouts and forms retain instant 100% native browser scrolling.
+    const isAppOrAuth =
+      pathname?.startsWith("/login") ||
+      pathname?.startsWith("/signup") ||
+      pathname?.startsWith("/invite") ||
+      pathname?.startsWith("/app") ||
+      pathname?.startsWith("/client");
+
+    if (isAppOrAuth) {
+      return;
+    }
+
     // Disable native scroll restoration across browser refreshes so the user always lands back on hero
     if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";

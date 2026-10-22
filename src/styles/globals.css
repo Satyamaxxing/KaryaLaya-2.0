@@ -7,6 +7,7 @@
 @import "./tokens.css";
 @import "./work-os.css";
 @import "./qronos.css";
+@import "./auth.css";
 
 :root {
   --background: #020408;

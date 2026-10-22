@@ -151,225 +151,7 @@ export default function UnifiedAuthView({ initialMode = "login" }: UnifiedAuthVi
   };
 
   return (
-    <>
-      <style>{`
-        /* Reset and layout base */
-        .auth-split-layout {
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-          width: 100%;
-          background-color: #000000;
-          color: #ffffff;
-          font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
-          overflow-x: hidden;
-        }
-
-        @media (min-width: 992px) {
-          .auth-split-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            height: 100vh;
-            overflow: hidden;
-          }
-        }
-
-        /* Left Side: Dark charcoal gradient with silk wave artwork */
-        .auth-left-pane {
-          position: relative;
-          display: none;
-          flex-direction: column;
-          justify-content: space-between;
-          overflow: hidden;
-          background: radial-gradient(ellipse 110% 120% at 20% 30%, #1e1e23 0%, #131316 50%, #0b0b0d 100%);
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 3rem 3.5rem;
-          box-sizing: border-box;
-          height: 100%;
-        }
-
-        @media (min-width: 992px) {
-          .auth-left-pane {
-            display: flex;
-          }
-        }
-
-        /* Mobile top header banner */
-        .auth-mobile-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 1.25rem 1.5rem;
-          background: radial-gradient(ellipse 120% 100% at 50% 0%, #1a1a1f 0%, #000000 100%);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          position: relative;
-          overflow: hidden;
-        }
-
-        @media (min-width: 992px) {
-          .auth-mobile-header {
-            display: none;
-          }
-        }
-
-        /* Right Side: Pure black background */
-        .auth-right-pane {
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          background-color: #000000;
-          padding: 2.5rem 1.5rem;
-          box-sizing: border-box;
-          min-height: 100vh;
-          overflow-y: auto;
-        }
-
-        @media (min-width: 992px) {
-          .auth-right-pane {
-            padding: 3rem 4rem;
-            height: 100vh;
-          }
-        }
-
-        /* Centered form card */
-        .auth-form-card {
-          width: 100%;
-          max-width: 380px;
-          margin: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 1rem 0;
-          box-sizing: border-box;
-        }
-
-        /* Social OAuth pill buttons (1:1 with reference) */
-        .auth-oauth-btn {
-          width: 100%;
-          height: 44px;
-          background-color: #e4e4e7;
-          color: #18181b;
-          border-radius: 10px;
-          font-size: 14px;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          border: none;
-          cursor: pointer;
-          transition: background-color 150ms ease, transform 100ms ease;
-          box-sizing: border-box;
-          user-select: none;
-          text-decoration: none;
-        }
-
-        .auth-oauth-btn:hover {
-          background-color: #f4f4f5;
-        }
-
-        .auth-oauth-btn:active {
-          transform: scale(0.99);
-        }
-
-        /* Input field container */
-        .auth-input-wrapper {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          height: 44px;
-          background-color: #09090b;
-          border: 1px solid #27272a;
-          border-radius: 10px;
-          padding: 0 14px;
-          box-sizing: border-box;
-          transition: border-color 150ms ease, box-shadow 150ms ease;
-          outline: none !important;
-        }
-
-        .auth-input-wrapper:focus-within {
-          border-color: rgba(255, 255, 255, 0.35);
-          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
-        }
-
-        .auth-input-field {
-          width: 100%;
-          height: 100%;
-          background: transparent !important;
-          border: none !important;
-          outline: none !important;
-          box-shadow: none !important;
-          color: #ffffff !important;
-          font-size: 14px;
-          box-sizing: border-box;
-          -webkit-appearance: none;
-        }
-
-        .auth-input-field:focus {
-          outline: none !important;
-          box-shadow: none !important;
-        }
-
-        .auth-input-field::placeholder {
-          color: #52525b;
-        }
-
-        /* Submit Button */
-        .auth-submit-btn {
-          width: 100%;
-          height: 44px;
-          background-color: #e4e4e7;
-          color: #18181b;
-          border-radius: 10px;
-          font-size: 14px;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border: none;
-          cursor: pointer;
-          transition: background-color 150ms ease, transform 100ms ease;
-          margin-top: 12px;
-          box-sizing: border-box;
-        }
-
-        .auth-submit-btn:hover {
-          background-color: #f4f4f5;
-        }
-
-        .auth-submit-btn:active {
-          transform: scale(0.99);
-        }
-
-        .auth-submit-btn:disabled {
-          opacity: 0.65;
-          cursor: not-allowed;
-        }
-
-        .auth-seed-chip {
-          padding: 4px 10px;
-          border-radius: 9999px;
-          font-size: 11px;
-          font-weight: 500;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          background-color: rgba(255, 255, 255, 0.05);
-          cursor: pointer;
-          transition: all 150ms ease;
-        }
-
-        .auth-seed-chip:hover {
-          background-color: rgba(255, 255, 255, 0.12);
-        }
-
-        @media (max-width: 640px) {
-          .desktop-break {
-            display: none;
-          }
-        }
-      `}</style>
-
-      <div className="auth-split-layout">
+    <div className="auth-split-layout" data-lenis-prevent="true">
         {/* =========================================================================
             MOBILE-ONLY HEADER: Clean logo & Home link
             ========================================================================= */}
@@ -512,7 +294,7 @@ export default function UnifiedAuthView({ initialMode = "login" }: UnifiedAuthVi
         {/* =========================================================================
             RIGHT PANEL: 50% split, Pure Black, Home Link, Vertically Centered Form
             ========================================================================= */}
-        <div className="auth-right-pane">
+        <div className="auth-right-pane" data-lenis-prevent="true">
           {/* Top Bar: < Home link (Exact 1:1 match with screenshot top-left) */}
           <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
             <Link
@@ -691,7 +473,7 @@ export default function UnifiedAuthView({ initialMode = "login" }: UnifiedAuthVi
 
             {/* Email Form */}
             {!showPasswordStep ? (
-              <form onSubmit={handleContinueWithEmail} style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+              <form onSubmit={handleContinueWithEmail} className="auth-step-container" style={{ width: "100%", display: "flex", flexDirection: "column" }}>
                 <label
                   htmlFor="auth-email-input"
                   style={{
@@ -730,7 +512,7 @@ export default function UnifiedAuthView({ initialMode = "login" }: UnifiedAuthVi
                 </button>
               </form>
             ) : (
-              <form onSubmit={handleFinalSubmit} style={{ width: "100%", display: "flex", flexDirection: "column", gap: "10px" }}>
+              <form onSubmit={handleFinalSubmit} className="auth-step-container" style={{ width: "100%", display: "flex", flexDirection: "column", gap: "10px" }}>
                 {/* Email pill with change action */}
                 <div
                   style={{
@@ -934,6 +716,5 @@ export default function UnifiedAuthView({ initialMode = "login" }: UnifiedAuthVi
           <div style={{ height: "16px" }} aria-hidden="true" />
         </div>
       </div>
-    </>
   );
 }

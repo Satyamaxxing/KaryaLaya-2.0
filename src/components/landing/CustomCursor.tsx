@@ -1,25 +1,30 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * CustomCursor:
- * - Default: Fluid Curzr Arrow Pointer (rotates in direction of movement)
- * - Interactive Hover (buttons, links, clickable items): Morphs into the Retro Card-Hand Pointer (1:1 matching reference image)
- * - Dual-layer support: Works seamlessly with hardware acceleration, falls back gracefully.
- * - Robust: Safe Element checking (handles SVGs/text nodes without throwing), preserves native I-beam on inputs.
+ * - Active on marketing landing pages.
+ * - Automatically disabled on auth (/login, /signup, /invite) and dashboard (/app, /client)
+ *   so inputs and web app controls have 0ms native hardware cursor latency.
  */
 export default function CustomCursor() {
+  const pathname = usePathname();
   const cursorRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLDivElement>(null);
   const cardHandRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
+  const isExcluded =
+    !pathname ||
+    pathname.startsWith("/app") ||
+    pathname.startsWith("/client");
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || isExcluded) return;
 
     // Only disable if device does not support hover at all (e.g. mobile phones / pure touchscreens without mouse)
-    // Never disable on Windows touchscreen laptops that have a mouse or trackpad connected!
     const canHover = window.matchMedia("(hover: hover)").matches;
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -28,7 +33,7 @@ export default function CustomCursor() {
     }
 
     setMounted(true);
-  }, []);
+  }, [isExcluded]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -100,13 +105,15 @@ export default function CustomCursor() {
         const target = (rawTarget instanceof Element ? rawTarget : rawTarget?.parentElement) as Element | null;
 
         if (target && typeof target.closest === "function") {
-          const editable = target.closest("input, textarea, select, [contenteditable='true']");
+          const editable = target.closest(
+            "input, textarea, select, [contenteditable='true'], .auth-input-wrapper"
+          );
           isOverEditable = !!editable;
 
           cursor.style.opacity = isOverEditable ? "0" : "1";
 
           const interactive = target.closest(
-            "a, button, [role='button'], .cursor-pointer, summary, input[type='submit'], input[type='button'], label[for], [onclick], [data-cursor='pointer']"
+            "a, button, [role='button'], .cursor-pointer, summary, input[type='submit'], input[type='button'], label[for], [onclick], [data-cursor='pointer'], .auth-oauth-btn, .auth-submit-btn, .auth-seed-chip"
           );
           updateHoverState(!!interactive && !isOverEditable);
         }
@@ -140,19 +147,19 @@ export default function CustomCursor() {
       const dx = targetX - currentX;
       const dy = targetY - currentY;
 
-      // Position lerp
-      currentX += dx * 0.32;
-      currentY += dy * 0.32;
+      // Position lerp (ultra-responsive, instant tracking without jitter)
+      currentX += dx * 0.72;
+      currentY += dy * 0.72;
 
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (isHovering) {
         // Pointing card hand stays upright with zero angular tilt
         targetAngle = 0;
-        currentAngle += (0 - currentAngle) * 0.35;
+        currentAngle += (0 - currentAngle) * 0.4;
       } else {
         // Default arrow dynamically tracks travel direction
-        if (dist > 0.8) {
+        if (dist > 0.6) {
           targetAngle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
         }
 
@@ -160,12 +167,12 @@ export default function CustomCursor() {
         let diff = targetAngle - currentAngle;
         if (diff > 180) diff -= 360;
         else if (diff < -180) diff += 360;
-        currentAngle += diff * 0.22;
+        currentAngle += diff * 0.28;
       }
 
       // Scale easing
       targetScale = isClicking ? 0.85 : 1;
-      currentScale += (targetScale - currentScale) * 0.28;
+      currentScale += (targetScale - currentScale) * 0.35;
 
       // Hotspot offset:
       // When hovering (Card Hand): index fingertip is at x=16, y=10 inside 32x32 box
@@ -199,7 +206,7 @@ export default function CustomCursor() {
     };
   }, [mounted]);
 
-  if (!mounted) return null;
+  if (!mounted || isExcluded) return null;
 
   return (
     <>
