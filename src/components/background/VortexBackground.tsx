@@ -186,6 +186,7 @@ export default function VortexBackground({
     }
 
     let isDisposed = false;
+    let isVisible = true;
     let animId = 0;
 
     let renderer: THREE.WebGLRenderer;
@@ -1063,7 +1064,6 @@ export default function VortexBackground({
       renderer.render(scene, camera);
     };
 
-    let isVisible = true;
     const observer = new IntersectionObserver(
       ([entry]) => {
         const wasVisible = isVisible;
