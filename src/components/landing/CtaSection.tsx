@@ -81,8 +81,13 @@ export function CtaSection() {
               </span>
             </div>
 
-            {/* Headline */}
-            <h2 className="font-display text-[38px] sm:text-[46px] lg:text-[54px] font-normal leading-[1.05] tracking-tight">
+            <h2
+              className="font-display text-[38px] sm:text-[46px] lg:text-[54px] font-normal leading-[1.05]"
+              style={{
+                letterSpacing: "-0.065em",
+                wordSpacing: "0.18em",
+              }}
+            >
               <span className="block text-white">One workspace.</span>
               <span className="mt-1 block bg-gradient-to-b from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent lg:mt-2">
                 Every deliverable in sync.

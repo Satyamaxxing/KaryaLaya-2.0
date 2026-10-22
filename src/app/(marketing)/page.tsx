@@ -195,9 +195,10 @@ export default function HomePage() {
                     textAlign: "center",
                     fontSize: "clamp(2.1rem, 4.6vw, 4.5rem)",
                     lineHeight: 1.02,
-                    letterSpacing: "-0.03em",
+                    letterSpacing: "-0.095em",
+                    wordSpacing: "0.22em",
                     color: "#ffffff",
-                    fontWeight: 500,
+                    fontWeight: 400,
                     opacity: mounted ? 1 : 0,
                     transform: mounted ? "translateY(0)" : "translateY(1.5rem)",
                     transition: "opacity 1000ms ease, transform 1000ms ease",
@@ -211,7 +212,7 @@ export default function HomePage() {
                         fontStyle: "italic",
                         fontWeight: 400,
                         fontSize: "1.08em",
-                        letterSpacing: "-0.01em",
+                        letterSpacing: "-0.06em",
                         color: "#ffffff",
                         paddingRight: "0.05em",
                       }}
@@ -234,7 +235,8 @@ export default function HomePage() {
                         fontStyle: "italic",
                         fontWeight: 400,
                         fontSize: "1.08em",
-                        letterSpacing: "-0.01em",
+                        letterSpacing: "-0.06em",
+                        paddingRight: "0.22em",
                       }}
                     >
                       Modern Work
@@ -250,16 +252,17 @@ export default function HomePage() {
                   zIndex: 0,
                   marginBottom: "2.25rem",
                   textAlign: "center",
-                  fontSize: "clamp(18px, 1.6vw, 24px)",
+                  fontSize: "clamp(13px, 1.8vw, 22px)",
                   lineHeight: 1.5,
                   letterSpacing: "-0.01em",
+                  whiteSpace: "nowrap",
                   color: "#ffffff",
                   opacity: mounted ? 1 : 0,
                   transform: mounted ? "translateY(0)" : "translateY(1rem)",
                   transition: "opacity 700ms 150ms ease, transform 700ms 150ms ease",
                 }}
               >
-                Everything your team needs, aligned to move as one.
+                The Workspace for freelancers, agencies, and their clients.
               </p>
 
               {/* Action Buttons: 1:1 Qronos Buttons */}

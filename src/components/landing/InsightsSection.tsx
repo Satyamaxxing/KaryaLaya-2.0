@@ -849,12 +849,12 @@ export function InsightsSection() {
 
           <div>
             <h2
+              className="font-display tracking-tight"
               style={{
-                fontFamily: "var(--font-display, sans-serif)",
-                fontSize: "clamp(34px, 4vw, 52px)",
-                lineHeight: 1.04,
-                letterSpacing: "-0.025em",
-                fontWeight: 500,
+                fontSize: "clamp(44px, 5.2vw, 72px)",
+                lineHeight: 1.05,
+                letterSpacing: "-0.065em",
+                wordSpacing: "0.18em",
               }}
             >
               <span className="insights-title-line" style={{ display: "block", color: "#ffffff" }}>
@@ -864,7 +864,7 @@ export function InsightsSection() {
                 className="insights-title-line"
                 style={{
                   display: "block",
-                  marginTop: "0.5rem",
+                  marginTop: "clamp(0.5rem, 1vw, 0.875rem)",
                   color: "rgba(255, 255, 255, 0.6)",
                 }}
               >

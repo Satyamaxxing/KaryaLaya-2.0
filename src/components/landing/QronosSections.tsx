@@ -318,7 +318,8 @@ export function HowItWorksSection() {
               style={{
                 fontSize: "clamp(44px, 5.2vw, 72px)",
                 lineHeight: 1.05,
-                letterSpacing: "-0.025em",
+                letterSpacing: "-0.065em",
+                wordSpacing: "0.18em",
               }}
             >
               <span className="sec3-line-1 block text-foreground will-change-transform">

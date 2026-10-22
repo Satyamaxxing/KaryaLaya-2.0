@@ -1829,7 +1829,8 @@ export function InboxSection() {
                 lineHeight: "1.08",
                 fontWeight: 600,
                 color: "#ffffff",
-                letterSpacing: "-0.025em",
+                letterSpacing: "-0.065em",
+                wordSpacing: "0.18em",
                 margin: 0,
               }}
             >

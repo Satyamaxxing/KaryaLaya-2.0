@@ -960,7 +960,8 @@ export function FeaturesSection() {
               style={{
                 fontSize: "clamp(24px, 4.5vw, 72px)",
                 lineHeight: 1.08,
-                letterSpacing: "-0.025em",
+                letterSpacing: "-0.065em",
+                wordSpacing: "0.18em",
               }}
             >
               <span className="sec2-headline-line block text-foreground">
