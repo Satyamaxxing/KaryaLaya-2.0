@@ -159,6 +159,11 @@ export default function IntegrationLogoStrip() {
         .qronos-icon-item:hover .qronos-marquee-label {
           color: #ffffff !important;
         }
+        @media (max-width: 768px) {
+          .qronos-marquee-svg {
+            filter: none !important;
+          }
+        }
       `}</style>
     </div>
   );

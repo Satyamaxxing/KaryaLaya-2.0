@@ -28,6 +28,7 @@ export default function HomePage() {
       {/* Precision Vertical Hairline Guidelines matching original Qronos template spanning full screen */}
       <div
         aria-hidden="true"
+        className="hidden sm:block"
         style={{
           pointerEvents: "none",
           position: "fixed",
@@ -124,9 +125,9 @@ export default function HomePage() {
           >
             <VortexBackground
               background="#000000"
-              lineOptions={{ color: "#ffffff", glow: 8.5, count: 80 }}
-              dotOptions={{ color: "#ffffff", glow: 11, count: 350 }}
-              cometOptions={{ color: "#eca8d6", glow: 7 }}
+              lineOptions={{ color: "#ffffff", glow: 11.5, count: 80 }}
+              dotOptions={{ color: "#ffffff", glow: 13, count: 950, size: 28 }}
+              cometOptions={{ color: "#ffffff", glow: 7 }}
               repel={true}
             />
 
@@ -138,7 +139,7 @@ export default function HomePage() {
                 inset: 0,
                 pointerEvents: "none",
                 background:
-                  "radial-gradient(ellipse 65% 50% at 50% 46%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.18) 45%, transparent 75%)",
+                  "radial-gradient(ellipse 65% 50% at 50% 46%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.08) 45%, transparent 75%)",
               }}
             />
 
@@ -192,7 +193,8 @@ export default function HomePage() {
                     position: "relative",
                     zIndex: 10,
                     margin: 0,
-                    textAlign: "center",
+                    display: "inline-block",
+                    textAlign: "left",
                     fontSize: "clamp(2.1rem, 4.6vw, 4.5rem)",
                     lineHeight: 1.02,
                     letterSpacing: "-0.095em",
@@ -212,9 +214,9 @@ export default function HomePage() {
                         fontStyle: "italic",
                         fontWeight: 400,
                         fontSize: "1.08em",
-                        letterSpacing: "-0.06em",
+                        letterSpacing: "-0.04em",
                         color: "#ffffff",
-                        paddingRight: "0.05em",
+                        paddingRight: "0.22em",
                       }}
                     >
                       Gravity
@@ -328,7 +330,7 @@ export default function HomePage() {
                     padding: "0 1.35rem",
                     color: "#000000",
                     textDecoration: "none",
-                    cursor: "pointer",
+                    cursor: "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADs0lEQVRYhe2WT0gjZxjGH2V32T/k1JYe4l68lFoo6KW5eOrB9dB6aRChVklAeosoCC2CqBRyEqQpwm50yYJSSgU9WDHdthT00EPWIApGNzHbMkmYjklmzL/JzDff8g4zki5kV2N2L90Hnssw876/93u/95sPeKsaaZr2BWPsCec8Uc+MsaeMsUeyLL+DZkpRlA7GmK5pmpFOp7V6zufzOuecl8vlHwG0NCt/qyAI31Jgv99fBJCpZ4fDISqKYpRKpTyAm80CuH5wcHCfAKanp1MAfgfw2Ol0/hkOh9PpdLokiqLtMmOMM8YMxljSakuE2nclgL29vYcEMDMz8w+AXwGEw+Fwhp5JkmQkk8lzi6LIyYIgaORqtUowuqIoHzYT4HEmk9FyuRwHoAKo2B4cHDSGhoYMAFny7Oxshb4VBOEbamfTACRJYplMhhIpAGTLCgF4PB7D6/X+7fF4nk1NTWXpW2ojxXodAHKtKfnJyQm3lUqlzMmgGK8dwOVyFSRJMhNvbGyYtvVGAEZHR81+p1Ip3tXVxUdGRt4sgM/nU+k9SgzgLQBvWgsikcgDCjI3Nyc02oLj4+PVhgGCwaBP13WDfkb2sUtHbjab5f39/cz20tISrwdgGAbXdf1nXde/rFQqH1wGoBXAR6FQKCGKYkWWZZVMAQlgYGCA2V5cXDRqAWgS9vf3+fz8PN/d3T2HYYwxTdO+U1X144tC3ADwOYCfAPwG4A9ZljVZlo3Ozk7F6XTS3y83MTFRrgWodXt7Ow+FQnx8fJyfnZ2dL0y1Wv36wq0AcBvAHQDvx2Kx9HlJnPNKpcIKhQKrB1Drnp4ePjY2xovFIi8UCk8b2Rs3/X6/uTGPjo74zs5OLQv3er0vBbCtqiqXZTlvFXYptfp8vk/K5TKjKjo6Onhvby9fWVnhy8vL5nK/Kjl9Q0okEoK1qpdSC4B319fX4xQkGo1yh8Nxoaptu91uEyAajf4F4BYa0A0Ag4eHhwoFCgQClwJYWFgwATY3N+9bsRqSw+12/5DL5TQaS5fLdaHkNJ6lUok2oT48PPwZgGuNArQCuBsMBiNUTTKZ5N3d3XUTt7W18cnJSdp4ZvWrq6uHAN676g36OoB729vb/9pTQNXF4/H/mJ7ZUlXVWFtbronuvt3o8fyi6IxGg8EAs9isVhRkqRqPp/Xan16elqNx+OlrW2t076+vicAvmpk/OqpxQr2KYDvAWxYJ2atfwHwAACdfHevsvFepmvWSN2p41tW4oZux/jf6TmVnYEWge6xlr/28AAAAASUVORK5CYII=') 16 10, url('/images/custom-pointer.png') 16 10, pointer",
                     transition: "all 150ms ease",
                   }}
                   onMouseEnter={(e) => {

@@ -104,6 +104,29 @@ a {
   text-decoration: none;
 }
 
+/* =========================================================================
+   CUSTOM RETRO CARD-HAND POINTER CURSOR (32x32 Windows & Cross-Browser Native)
+   ========================================================================= */
+a,
+a *,
+button,
+button *,
+[role="button"],
+[role="button"] *,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+summary,
+.cursor-pointer,
+.cursor-pointer *,
+[onclick],
+label[for] {
+  cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADs0lEQVRYhe2WT0gjZxjGH2V32T/k1JYe4l68lFoo6KW5eOrB9dB6aRChVklAeosoCC2CqBRyEqQpwm50yYJSSgU9WDHdthT00EPWIApGNzHbMkmYjklmzL/JzDff8g4zki5kV2N2L90Hnssw876/93u/95sPeKsaaZr2BWPsCec8Uc+MsaeMsUeyLL+DZkpRlA7GmK5pmpFOp7V6zufzOuecl8vlHwG0NCt/qyAI31Jgv99fBJCpZ4fDISqKYpRKpTyAm80CuH5wcHCfAKanp1MAfgfw2Ol0/hkOh9PpdLokiqLtMmOMM8YMxljSakuE2nclgL29vYcEMDMz8w+AXwGEw+Fwhp5JkmQkk8lzi6LIyYIgaORqtUowuqIoHzYT4HEmk9FyuRwHoAKo2B4cHDSGhoYMAFny7Oxshb4VBOEbamfTACRJYplMhhIpAGTLCgF4PB7D6/X+7fF4nk1NTWXpW2ojxXodAHKtKfnJyQm3lUqlzMmgGK8dwOVyFSRJMhNvbGyYtvVGAEZHR81+p1Ip3tXVxUdGRt4sgM/nU+k9SgzgLQBvWgsikcgDCjI3Nyc02oLj4+PVhgGCwaBP13WDfkb2sUtHbjab5f39/cz20tISrwdgGAbXdf1nXde/rFQqH1wGoBXAR6FQKCGKYkWWZZVMAQlgYGCA2V5cXDRqAWgS9vf3+fz8PN/d3T2HYYwxTdO+U1X144tC3ADwOYCfAPwG4A9ZljVZlo3Ozk7F6XTS3y83MTFRrgWodXt7Ow+FQnx8fJyfnZ2dL0y1Wv36wq0AcBvAHQDvx2Kx9HlJnPNKpcIKhQKrB1Drnp4ePjY2xovFIi8UCk8b2Rs3/X6/uTGPjo74zs5OLQv3er0vBbCtqiqXZTlvFXYptfp8vk/K5TKjKjo6Onhvby9fWVnhy8vL5nK/Kjl9Q0okEoK1qpdSC4B319fX4xQkGo1yh8Nxoaptu91uEyAajf4F4BYa0A0Ag4eHhwoFCgQClwJYWFgwATY3N+9bsRqSw+12/5DL5TQaS5fLdaHkNJ6lUok2oT48PPwZgGuNArQCuBsMBiNUTTKZ5N3d3XUTt7W18cnJSdp4ZvWrq6uHAN676g36OoB729vb/9pTQNXF4/H/mJ7ZUlXVWFtbronuvt3o8fyi6IxGg8EAs9isVhRkqRqPp/Xan16elqNx+OlrW2t076+vicAvmpk/OqpxQr2KYDvAWxYJ2atfwHwAACdfHevsvFepmvWSN2p41tW4oZux/jf6TmVnYEWge6xlr/28AAAAASUVORK5CYII=') 16 10, url('/images/custom-pointer.png') 16 10, pointer !important;
+}
+
 ::selection {
   background: rgba(91, 91, 214, 0.16);
   color: var(--kl-text-primary, #0B0B0C);
@@ -232,13 +255,23 @@ a {
   0% {
     offset-distance: 0%;
   }
-  to {
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@-webkit-keyframes star-btn {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
     offset-distance: 100%;
   }
 }
 
 .animate-star-btn {
   animation: star-btn calc(var(--duration, 3) * 1s) linear infinite;
+  -webkit-animation: star-btn calc(var(--duration, 3) * 1s) linear infinite;
 }
 
 /* =========================================================================

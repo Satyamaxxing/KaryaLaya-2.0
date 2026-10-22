@@ -649,6 +649,26 @@ export function FeaturesSection() {
     return () => observer.disconnect();
   }, [hasEntered]);
 
+  // Pause simulation timeline when section is scrolled out of view to eliminate background re-renders
+  useEffect(() => {
+    if (!hasEntered) return;
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!masterTlRef.current) return;
+        if (entry.isIntersecting) {
+          masterTlRef.current.play();
+        } else {
+          masterTlRef.current.pause();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasEntered]);
+
   // Helper to update SVG indicator dot position along the cubic Bézier curve
   const updateDotPosition = (x: number, y: number, color: string) => {
     const xs = x.toFixed(2);

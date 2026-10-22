@@ -221,7 +221,7 @@ export default function InteractiveFooterLogo({
     };
   }, []);
 
-  // Canvas particle loop
+  // Canvas particle loop — paused when footer is offscreen to save mobile CPU/GPU
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -230,6 +230,13 @@ export default function InteractiveFooterLogo({
 
     updateCanvasBounds();
     window.addEventListener("resize", updateCanvasBounds);
+
+    let isVisible = false;
+
+    const scheduleRender = () => {
+      if (animFrameRef.current) return;
+      animFrameRef.current = requestAnimationFrame(render);
+    };
 
     const render = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -301,14 +308,33 @@ export default function InteractiveFooterLogo({
         ctx.restore();
       }
 
-      animFrameRef.current = requestAnimationFrame(render);
+      // Loop only when in view or when active particles/charge remain
+      if (isVisible || particles.length > 0 || chargeRef.current > 0 || stateRef.current !== "idle") {
+        animFrameRef.current = requestAnimationFrame(render);
+      } else {
+        animFrameRef.current = null;
+      }
     };
 
-    animFrameRef.current = requestAnimationFrame(render);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          scheduleRender();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", updateCanvasBounds);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
     };
   }, [updateCanvasBounds, spawnParticle]);
 

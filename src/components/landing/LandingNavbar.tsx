@@ -77,6 +77,7 @@ export default function LandingNavbar() {
         >
           {/* Frosted Translucent Background Ribbon — Opacity transition for smooth 120fps GPU compositing */}
           <div
+            className="qronos-nav-ribbon"
             aria-hidden="true"
             style={{
               position: "absolute",
@@ -495,6 +496,11 @@ export default function LandingNavbar() {
           }
           .qronos-mobile-btn {
             display: inline-flex !important;
+          }
+          .qronos-nav-ribbon {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background-color: rgba(0, 0, 0, 0.94) !important;
           }
         }
         @keyframes qronosFadeIn {

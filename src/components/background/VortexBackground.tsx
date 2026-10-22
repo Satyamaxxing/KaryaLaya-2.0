@@ -7,7 +7,7 @@ import * as THREE from "three";
 // ORIGINAL QRONOS VORTEX MATH & OPTIMIZED PERFORMANCE PIPELINE
 // ============================================================================
 const DEFAULT_LINE_OPTIONS = { count: 120, color: "#ffffff", glow: 10 };
-const DEFAULT_DOT_OPTIONS = { count: 850, size: 20, color: "#ffffff", glow: 10, flicker: 10 };
+const DEFAULT_DOT_OPTIONS = { count: 950, size: 28, color: "#ffffff", glow: 13, flicker: 10 };
 const DEFAULT_COMET_OPTIONS = { count: 10, speed: 6, color: "#eca8d6", glow: 6, tail: 19, delay: 8, collide: 6 };
 const DEFAULT_REPEL_OPTIONS = { radius: 60, strength: 10 };
 
@@ -185,6 +185,10 @@ export default function VortexBackground({
       return;
     }
 
+    const isMobile =
+      typeof window !== "undefined" &&
+      (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches);
+
     let isDisposed = false;
     let isVisible = true;
     let animId = 0;
@@ -205,7 +209,7 @@ export default function VortexBackground({
     }
 
     renderer.setClearColor(0, 0);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+    renderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.25));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.38;
 
@@ -457,8 +461,12 @@ export default function VortexBackground({
       camera.updateProjectionMatrix();
       updateColors(cfg);
 
-      const lineTotal = Math.max(3, Math.round(cfg.lineCount));
-      const totalVertices = lineTotal * POINTS_PER_STRAND;
+      const currentPointsPerStrand = isMobile ? 100 : POINTS_PER_STRAND;
+      const currentSegmentsPerStrand = currentPointsPerStrand - 1;
+      const lineTotal = isMobile
+        ? Math.min(26, Math.max(3, Math.round(cfg.lineCount * 0.33)))
+        : Math.max(3, Math.round(cfg.lineCount));
+      const totalVertices = lineTotal * currentPointsPerStrand;
       linePositions = new Float32Array(totalVertices * 3);
       lineColors = new Float32Array(totalVertices * 3);
 
@@ -471,12 +479,12 @@ export default function VortexBackground({
       lineGeometry.setAttribute("color", colAttr);
 
       // Pre-compute static index buffer for all strands
-      const totalIndices = lineTotal * SEGMENTS_PER_STRAND * 2;
+      const totalIndices = lineTotal * currentSegmentsPerStrand * 2;
       const indices = totalVertices > 65535 ? new Uint32Array(totalIndices) : new Uint16Array(totalIndices);
       let idx = 0;
       for (let i = 0; i < lineTotal; i++) {
-        const base = i * POINTS_PER_STRAND;
-        for (let p = 0; p < SEGMENTS_PER_STRAND; p++) {
+        const base = i * currentPointsPerStrand;
+        for (let p = 0; p < currentSegmentsPerStrand; p++) {
           indices[idx++] = base + p;
           indices[idx++] = base + p + 1;
         }
@@ -488,7 +496,7 @@ export default function VortexBackground({
           new THREE.LineBasicMaterial({
             vertexColors: true,
             transparent: true,
-            opacity: 0.58,
+            opacity: 0.82,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
           })
@@ -508,25 +516,29 @@ export default function VortexBackground({
           wobblePhase: Math.random() * TAU,
           from: 0,
           to: 1,
-          bright: 0.5,
-          offset: i * POINTS_PER_STRAND * 3,
+          bright: 0.68,
+          offset: i * currentPointsPerStrand * 3,
         });
       }
 
       // Star / Dot Particles (Distributed organically throughout the lines and depth)
-      dotCount = cfg.showDots ? Math.max(0, Math.round(cfg.dotCount)) : 0;
+      dotCount = cfg.showDots
+        ? isMobile
+          ? Math.min(160, Math.round(cfg.dotCount * 0.22))
+          : Math.max(0, Math.round(cfg.dotCount))
+        : 0;
       dotsData = [];
       for (let i = 0; i < dotCount; i++) {
         // Natural distribution along the curves:
-        // Weighted towards waist and upper funnel while spreading across the entire height
-        const s = Math.random() < 0.6 ? 0.18 + 0.5 * Math.random() : 0.03 + 0.94 * Math.random();
+        // Well-balanced across upper funnel, waist, and flared base
+        const s = Math.random() < 0.65 ? 0.16 + 0.68 * Math.random() : 0.02 + 0.96 * Math.random();
         const strandIdx = Math.floor(Math.random() * strands.length);
         const strand = strands[strandIdx] ?? strands[0];
         // Spread lane across the gaps between lines so stars don't sit in a 1D grid
-        const laneJitter = (Math.random() - 0.5) * (TAU / strands.length) * 1.5;
+        const laneJitter = (Math.random() - 0.5) * (TAU / strands.length) * 2.0;
         // Radial and vertical dispersion
-        const radialOffset = (Math.random() - 0.5) * 0.04;
-        const heightOffset = (Math.random() - 0.5) * 0.06;
+        const radialOffset = (Math.random() - 0.5) * 0.05;
+        const heightOffset = (Math.random() - 0.5) * 0.08;
 
         dotsData.push({
           s,
@@ -534,8 +546,8 @@ export default function VortexBackground({
           strand: strandIdx,
           pulse: Math.random() * TAU,
           wobblePhase: Math.random() * TAU,
-          flickerRate: 0.15 + 4.5 * Math.random(),
-          bright: 0.04 + Math.random() ** 1.5 * 0.96,
+          flickerRate: 0.2 + 4.0 * Math.random(),
+          bright: 0.28 + 0.72 * (Math.random() ** 1.1),
           radialOffset,
           heightOffset,
         });
@@ -597,7 +609,11 @@ export default function VortexBackground({
         })()
       );
 
-      const cometTotal = cfg.showComets ? Math.max(0, Math.round(cfg.cometCount)) : 0;
+      const cometTotal = cfg.showComets
+        ? isMobile
+          ? Math.min(3, Math.round(cfg.cometCount * 0.3))
+          : Math.max(0, Math.round(cfg.cometCount))
+        : 0;
       const cometTailPts = Math.max(2, Math.round(cfg.cometTail));
       cometsList = [];
 
@@ -714,9 +730,11 @@ export default function VortexBackground({
       mouseTargetStrength = 0;
     };
 
-    container.addEventListener("pointermove", onPointerMove);
-    container.addEventListener("pointerleave", onPointerLeave);
-    container.addEventListener("pointercancel", onPointerLeave);
+    if (!isMobile) {
+      container.addEventListener("pointermove", onPointerMove);
+      container.addEventListener("pointerleave", onPointerLeave);
+      container.addEventListener("pointercancel", onPointerLeave);
+    }
 
     rebuildScene();
 
@@ -766,20 +784,23 @@ export default function VortexBackground({
           const oGlow = strand.bright * cfg.lineGlow;
           const lMul = 0.15 + 1.5 * oGlow;
           const pulseTerm =
-            Math.min(0.5 * oGlow * (0.9 + 0.1 * Math.sin(0.18 * elapsed + strand.pulse)), 0.7) *
+            Math.min(0.68 * oGlow * (0.9 + 0.1 * Math.sin(0.18 * elapsed + strand.pulse)), 0.88) *
             Math.min(3 * introLines, 1);
           const cProg = strand.from + introLines * (strand.to - strand.from);
           const uProg = 0.15 * (strand.to - strand.from);
           const baseOffset = strand.offset;
 
-          for (let pIdx = 0; pIdx < POINTS_PER_STRAND; pIdx++) {
-            const nProg = pIdx / SEGMENTS_PER_STRAND;
+          const currentPointsPerStrand = isMobile ? 100 : POINTS_PER_STRAND;
+          const currentSegmentsPerStrand = currentPointsPerStrand - 1;
+
+          for (let pIdx = 0; pIdx < currentPointsPerStrand; pIdx++) {
+            const nProg = pIdx / currentSegmentsPerStrand;
             const aProg = strand.from + nProg * (strand.to - strand.from);
             const o3 = baseOffset + 3 * pIdx;
 
             splineHelpers.writePoint(linePositions, o3, aProg, strand.lane, strandFlow, 0.008, strand.wobblePhase, elapsed);
 
-            if (hasActiveShockwaves) {
+            if (!isMobile && hasActiveShockwaves) {
               let sx = 0, sy = 0, sz = 0, anyActive = false;
               for (let n = 0; n < 16; n++) {
                 const a = shockwaves[n];
@@ -1011,8 +1032,8 @@ export default function VortexBackground({
         comet.geo.attributes.color.needsUpdate = true;
       }
 
-      // Comet-dot collisions (every 4 frames)
-      if (++collisionCounter % 4 === 0 && dotCount > 0 && cfg.collideForce > 0) {
+      // Comet-dot collisions (every 4 frames) — skipped on mobile to save CPU
+      if (!isMobile && ++collisionCounter % 4 === 0 && dotCount > 0 && cfg.collideForce > 0) {
         const collideDistSq = 0.64;
         for (const comet of cometsList) {
           if (!comet.racing) continue;
@@ -1085,7 +1106,7 @@ export default function VortexBackground({
       observer.disconnect();
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
-      if (container) {
+      if (container && !isMobile) {
         container.removeEventListener("pointermove", onPointerMove);
         container.removeEventListener("pointerleave", onPointerLeave);
         container.removeEventListener("pointercancel", onPointerLeave);

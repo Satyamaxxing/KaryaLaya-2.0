@@ -36,7 +36,84 @@ export default function SmoothScroll() {
     });
     ScrollTrigger.clearScrollMemory?.("manual");
 
-    // Initialize Lenis with smooth wheel and syncTouch for silky smooth mobile touch scrolling
+    const isTouch =
+      window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768;
+
+    if (isTouch) {
+      // Mobile / touch devices:
+      // Completely bypass Lenis to ensure 100% native 120fps hardware scrolling without any main-thread touch software interception.
+      const onNativeScroll = () => ScrollTrigger.update();
+      window.addEventListener("scroll", onNativeScroll, { passive: true });
+
+      (window as any).lenis = {
+        scrollTo: (target: any, options?: any) => {
+          if (typeof target === "number") {
+            window.scrollTo({ top: target, behavior: options?.immediate ? "instant" : "smooth" });
+          } else if (target instanceof HTMLElement) {
+            const offset = options?.offset || 0;
+            const top = target.getBoundingClientRect().top + window.scrollY + offset;
+            window.scrollTo({ top, behavior: options?.immediate ? "instant" : "smooth" });
+          }
+        },
+        stop: () => {},
+        start: () => {},
+        resize: () => {},
+        destroy: () => {},
+      };
+
+      const handleAnchorClick = (e: MouseEvent) => {
+        const anchor = (e.target as HTMLElement).closest("a");
+        if (!anchor) return;
+        const href = anchor.getAttribute("href");
+        if (!href) return;
+
+        if (href === "/" && window.location.pathname === "/") {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          if (window.location.hash) {
+            window.history.replaceState(null, "", window.location.pathname + window.location.search);
+          }
+          return;
+        }
+
+        if (!href.startsWith("#") || href === "#") {
+          if (href === "#") {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+          return;
+        }
+
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const top = target.getBoundingClientRect().top + window.scrollY - 76;
+          window.scrollTo({ top, behavior: "smooth" });
+          window.history.pushState(null, "", href);
+        }
+      };
+
+      document.addEventListener("click", handleAnchorClick);
+
+      const onResize = () => {
+        ScrollTrigger.refresh();
+      };
+      window.addEventListener("resize", onResize, { passive: true });
+
+      const refreshTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 400);
+
+      return () => {
+        clearTimeout(refreshTimer);
+        document.removeEventListener("click", handleAnchorClick);
+        window.removeEventListener("scroll", onNativeScroll);
+        window.removeEventListener("resize", onResize);
+        delete (window as any).lenis;
+      };
+    }
+
+    // Initialize Lenis: smooth wheel for PC; native touch momentum for mobile to eliminate touch lag
     const lenis = new Lenis({
       autoRaf: false,
       anchors: false, // We handle anchor clicks ourselves with fixed navbar offset
@@ -44,8 +121,8 @@ export default function SmoothScroll() {
       easing: (t) => 1 - Math.pow(1 - t, 3), // Exact cubic-out easing curve
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      syncTouch: true, // Enables smooth inertial momentum scrolling on mobile touch devices
-      syncTouchLerp: 0.08, // Buttery smooth deceleration on finger release
+      syncTouch: true,
+      syncTouchLerp: 0.08,
       touchInertiaExponent: 1.5,
       touchMultiplier: 1.0,
       infinite: false,
