@@ -991,10 +991,10 @@ export function FeaturesSection() {
               {/* Sidebar Preview */}
               <aside
                 aria-label="Agency workflow scheduler sidebar"
-                className="sticky top-0 h-full w-[28%] sm:w-[24%] lg:w-[21.5%] shrink-0 self-stretch overflow-hidden border-r border-white/[0.06] bg-[#0c0d0f]/60 px-2 py-2.5 sm:px-3 sm:py-4 text-white/70 backdrop-blur-sm lg:px-5 lg:py-5 flex flex-col justify-between"
+                className="sticky top-0 h-full w-[29%] sm:w-[25%] lg:w-[23%] shrink-0 self-stretch overflow-hidden border-r border-white/[0.06] bg-[#0c0d0f]/60 px-2.5 py-3 sm:px-3.5 sm:py-4 lg:px-4 lg:py-4.5 text-white/70 backdrop-blur-sm flex flex-col gap-3.5 sm:gap-4 lg:gap-5 justify-start"
               >
                 {/* Brand Header */}
-                <div className="sec2-sidebar-item mb-2.5 sm:mb-5 lg:mb-6 flex items-center justify-between gap-1 sm:gap-2">
+                <div className="sec2-sidebar-item flex items-center justify-between gap-1.5 sm:gap-2">
                   <div className="flex min-w-0 items-center gap-1.5 sm:gap-2 font-medium text-white">
                     <div className="relative size-4 sm:size-5 shrink-0 overflow-hidden rounded-sm flex items-center justify-center">
                       <Image
@@ -1005,32 +1005,34 @@ export function FeaturesSection() {
                         className="size-full object-contain"
                       />
                     </div>
-                    <span className="truncate text-[11px] sm:text-xs lg:text-sm font-semibold tracking-tight text-white">
+                    <span className="truncate text-xs sm:text-sm lg:text-[15px] font-semibold tracking-tight text-white">
                       KaryaLaya
                     </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="10"
-                      height="10"
+                      width="12"
+                      height="12"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="size-2.5 sm:size-3 shrink-0 text-white/40"
+                      className="size-3 shrink-0 text-white/40"
                     >
                       <path d="m6 9 6 6 6-6" />
                     </svg>
                   </div>
 
                   {/* Header Action Icons */}
-                  <div className="hidden items-center gap-2 lg:flex">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/45">
-                      <path d="M16 16.5L20 20.5M18 11.5A6.5 6.5 0 115 11.5a6.5 6.5 0 0113 0z" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span className="grid size-7 place-items-center rounded-full border border-white/10 text-white/80">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <div className="hidden items-center gap-1.5 lg:flex">
+                    <span className="grid size-6 place-items-center text-white/45">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M16 16.5L20 20.5M18 11.5A6.5 6.5 0 115 11.5a6.5 6.5 0 0113 0z" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    <span className="grid size-6 place-items-center rounded-md border border-white/10 text-white/70">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path d="M16.42 4.6l.99-.99a2.83 2.83 0 114 4l-.99.99M16.42 4.6L9.77 11.26a4 4 0 00-.73 1.84L8 16l2.9-.72a4 4 0 001.84-.73L19.4 7.6" strokeLinejoin="round" />
                       </svg>
                     </span>
@@ -1038,22 +1040,22 @@ export function FeaturesSection() {
                 </div>
 
                 {/* Primary Navigation Items */}
-                <nav className="space-y-0.5 sm:space-y-1 text-xs sm:text-sm">
-                  {SIDEBAR_NAV_ITEMS.map((item, idx) => (
+                <nav className="space-y-1">
+                  {SIDEBAR_NAV_ITEMS.slice(0, 4).map((item, idx) => (
                     <div
                       key={item.label}
-                      className={`sec2-sidebar-item group items-center gap-1.5 sm:gap-2 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 transition-all duration-200 cursor-default select-none ${
+                      className={`sec2-sidebar-item group items-center gap-2 rounded-md px-2 py-1 sm:py-1.5 transition-all duration-200 cursor-default select-none ${
                         idx >= 3 ? "hidden sm:flex" : "flex"
                       } ${
                         item.active
-                          ? "-mx-1 sm:-mx-2 border border-white/10 bg-white/[0.08] text-white shadow-[0_1px_4px_rgba(0,0,0,0.5)] pl-2 sm:pl-4"
-                          : "text-white/55 hover:bg-white/[0.04] hover:text-white/90"
+                          ? "border border-white/10 bg-white/[0.08] text-white shadow-[0_1px_4px_rgba(0,0,0,0.5)] font-medium"
+                          : "text-white/60 hover:bg-white/[0.04] hover:text-white/90"
                       }`}
                     >
                       <span className={item.active ? "text-cyan-400" : "text-white/45 group-hover:text-white/70"}>
                         {item.icon}
                       </span>
-                      <span className="truncate text-[10px] sm:text-xs lg:text-sm font-medium tracking-tight">
+                      <span className="truncate text-xs sm:text-[13px] lg:text-[13.5px] font-medium tracking-tight">
                         {item.label}
                       </span>
                     </div>
@@ -1061,48 +1063,46 @@ export function FeaturesSection() {
                 </nav>
 
                 {/* Active Campaign Project Group */}
-                <div className="sec2-sidebar-item mt-2 sm:mt-6 pt-2 sm:pt-4 border-t border-white/[0.06]">
-                  <p className="hidden sm:flex mb-2 items-center justify-between text-[10px] font-medium tracking-wider uppercase text-white/35">
-                    <span>Campaign</span>
-                    <svg className="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="sec2-sidebar-item pt-2.5 sm:pt-3.5 border-t border-white/[0.07]">
+                  <p className="mb-2 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase text-white/40">
+                    <span>Active Campaign</span>
+                    <svg className="size-2.5 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="m6 9 6 6 6-6" />
                     </svg>
                   </p>
-                  <div className="rounded-md border border-white/[0.06] bg-white/[0.02] p-1.5 sm:p-2 transition-colors duration-500 hover:border-white/10">
-                    <p className="truncate text-[9px] sm:text-xs font-medium text-white/90">
+                  <div className="rounded-lg border border-white/[0.08] bg-white/[0.025] p-2 sm:p-2.5 transition-colors duration-300 hover:border-white/15">
+                    <p className="truncate text-xs sm:text-[13px] font-medium text-white/95">
                       Brand Growth
                     </p>
-                    <p className="mt-0.5 font-mono text-[8px] sm:text-[9px] text-emerald-400/90 flex items-center gap-1 sm:gap-1.5 transition-all duration-700">
-                      <span className="size-1 sm:size-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                      <span key={simPhase} className="truncate inline-block sec2-text-glide">
-                        {simPhase === 0 && "Live"}
-                        {simPhase === 1 && "Dev OK"}
-                        {simPhase === 2 && "V4 OK"}
-                        {simPhase === 3 && "30/30"}
-                        {simPhase === 4 && "Brand Kit"}
-                        {simPhase === 5 && "5/5 Sign"}
+                    <p className="mt-1 font-mono text-[10px] sm:text-[11px] text-emerald-400 flex items-center gap-1.5 transition-all duration-700">
+                      <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                      <span key={simPhase} className="truncate inline-block sec2-text-glide font-medium">
+                        {simPhase === 0 && "Live · In Progress"}
+                        {simPhase === 1 && "Dev OK · Verified"}
+                        {simPhase === 2 && "V4 OK · Review"}
+                        {simPhase === 3 && "30/30 Posts OK"}
+                        {simPhase === 4 && "Brand Kit Done"}
+                        {simPhase === 5 && "5/5 Sign-Off"}
                         {simPhase >= 6 && "Approved"}
                       </span>
                     </p>
                   </div>
                 </div>
 
-                {/* Workstream Leads (Silky Smooth Animated Progress Indicators) */}
-                <div className="sec2-sidebar-item mt-5 hidden lg:block">
-                  <p className="mb-2 flex items-center justify-between text-[10px] font-medium tracking-wider uppercase text-white/35">
+                {/* Workstream Leads */}
+                <div className="sec2-sidebar-item pt-2.5 sm:pt-3.5 border-t border-white/[0.07] hidden lg:block">
+                  <p className="mb-2.5 flex items-center justify-between text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase text-white/40">
                     <span>Workstream Leads</span>
-                    <svg className="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
+                    <span className="text-[10px] font-mono text-white/30 font-normal">4 active</span>
                   </p>
-                  <nav className="space-y-1.5 text-xs text-white/60">
+                  <nav className="space-y-1.5">
                     {/* Satyam · Landing Dev */}
-                    <div className="flex items-center justify-between py-0.5">
-                      <span className="truncate flex items-center gap-1.5 text-white/75">
-                        <span className={`size-1.5 rounded-full bg-cyan-400 transition-transform duration-500 ${simPhase === 1 ? "scale-125" : ""}`} />
-                        Satyam · Landing Dev
+                    <div className="flex items-center justify-between gap-1.5 py-1 px-1 rounded-md hover:bg-white/[0.03] transition-colors">
+                      <span className="truncate flex items-center gap-2 text-white/80 text-[12px] lg:text-[12.5px] font-medium min-w-0">
+                        <span className={`size-2 rounded-full bg-cyan-400 shrink-0 transition-transform duration-500 ${simPhase === 1 ? "scale-125 ring-2 ring-cyan-400/30" : ""}`} />
+                        <span className="truncate">Satyam · Landing Dev</span>
                       </span>
-                      <span className="text-[9px] font-mono transition-colors duration-700 text-cyan-400/90 font-medium">
+                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors duration-700 text-cyan-400 bg-cyan-400/10 font-medium">
                         <span key={getWorkstreamPhaseState("ws-1", simPhase).sidebarStat} className="inline-block sec2-text-glide">
                           {getWorkstreamPhaseState("ws-1", simPhase).sidebarStat}
                         </span>
@@ -1110,12 +1110,12 @@ export function FeaturesSection() {
                     </div>
 
                     {/* Rishav · Launch Reel */}
-                    <div className="flex items-center justify-between py-0.5">
-                      <span className="truncate flex items-center gap-1.5 text-white/75">
-                        <span className={`size-1.5 rounded-full bg-rose-400 transition-transform duration-500 ${simPhase === 2 ? "scale-125" : ""}`} />
-                        Rishav · Launch Reel
+                    <div className="flex items-center justify-between gap-1.5 py-1 px-1 rounded-md hover:bg-white/[0.03] transition-colors">
+                      <span className="truncate flex items-center gap-2 text-white/80 text-[12px] lg:text-[12.5px] font-medium min-w-0">
+                        <span className={`size-2 rounded-full bg-rose-400 shrink-0 transition-transform duration-500 ${simPhase === 2 ? "scale-125 ring-2 ring-rose-400/30" : ""}`} />
+                        <span className="truncate">Rishav · Launch Reel</span>
                       </span>
-                      <span className="text-[9px] font-mono transition-colors duration-700 text-rose-400/90 font-medium">
+                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors duration-700 text-rose-400 bg-rose-400/10 font-medium">
                         <span key={getWorkstreamPhaseState("ws-2", simPhase).sidebarStat} className="inline-block sec2-text-glide">
                           {getWorkstreamPhaseState("ws-2", simPhase).sidebarStat}
                         </span>
@@ -1123,12 +1123,12 @@ export function FeaturesSection() {
                     </div>
 
                     {/* Aisha · Calendar */}
-                    <div className="flex items-center justify-between py-0.5">
-                      <span className="truncate flex items-center gap-1.5 text-white/75">
-                        <span className={`size-1.5 rounded-full bg-emerald-400 transition-transform duration-500 ${simPhase === 3 ? "scale-125" : ""}`} />
-                        Aisha · Calendar
+                    <div className="flex items-center justify-between gap-1.5 py-1 px-1 rounded-md hover:bg-white/[0.03] transition-colors">
+                      <span className="truncate flex items-center gap-2 text-white/80 text-[12px] lg:text-[12.5px] font-medium min-w-0">
+                        <span className={`size-2 rounded-full bg-emerald-400 shrink-0 transition-transform duration-500 ${simPhase === 3 ? "scale-125 ring-2 ring-emerald-400/30" : ""}`} />
+                        <span className="truncate">Aisha · Calendar</span>
                       </span>
-                      <span className="text-[9px] font-mono transition-colors duration-700 text-emerald-400/90 font-medium">
+                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors duration-700 text-emerald-400 bg-emerald-400/10 font-medium">
                         <span key={getWorkstreamPhaseState("ws-3", simPhase).sidebarStat} className="inline-block sec2-text-glide">
                           {getWorkstreamPhaseState("ws-3", simPhase).sidebarStat}
                         </span>
@@ -1136,12 +1136,12 @@ export function FeaturesSection() {
                     </div>
 
                     {/* Arjun · Brand Kit */}
-                    <div className="flex items-center justify-between py-0.5">
-                      <span className="truncate flex items-center gap-1.5 text-white/75">
-                        <span className={`size-1.5 rounded-full bg-violet-400 transition-transform duration-500 ${simPhase === 4 ? "scale-125" : ""}`} />
-                        Arjun · Brand Kit
+                    <div className="flex items-center justify-between gap-1.5 py-1 px-1 rounded-md hover:bg-white/[0.03] transition-colors">
+                      <span className="truncate flex items-center gap-2 text-white/80 text-[12px] lg:text-[12.5px] font-medium min-w-0">
+                        <span className={`size-2 rounded-full bg-violet-400 shrink-0 transition-transform duration-500 ${simPhase === 4 ? "scale-125 ring-2 ring-violet-400/30" : ""}`} />
+                        <span className="truncate">Arjun · Brand Kit</span>
                       </span>
-                      <span className="text-[9px] font-mono transition-colors duration-700 text-violet-400/90 font-medium">
+                      <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors duration-700 text-violet-400 bg-violet-400/10 font-medium">
                         <span key={getWorkstreamPhaseState("ws-4", simPhase).sidebarStat} className="inline-block sec2-text-glide">
                           {getWorkstreamPhaseState("ws-4", simPhase).sidebarStat}
                         </span>
