@@ -62,7 +62,7 @@ export default function SmoothScroll() {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(updateLenis);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     // Always reset to top (Hero section) on initial mount or page refresh
     if (window.location.hash) {

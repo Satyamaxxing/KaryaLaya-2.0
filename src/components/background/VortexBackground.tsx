@@ -6,14 +6,14 @@ import * as THREE from "three";
 // ============================================================================
 // ORIGINAL QRONOS VORTEX MATH & OPTIMIZED PERFORMANCE PIPELINE
 // ============================================================================
-const DEFAULT_LINE_OPTIONS = { count: 200, color: "#ffffff", glow: 10 };
-const DEFAULT_DOT_OPTIONS = { count: 2800, size: 20, color: "#ffffff", glow: 10, flicker: 10 };
+const DEFAULT_LINE_OPTIONS = { count: 120, color: "#ffffff", glow: 10 };
+const DEFAULT_DOT_OPTIONS = { count: 850, size: 20, color: "#ffffff", glow: 10, flicker: 10 };
 const DEFAULT_COMET_OPTIONS = { count: 10, speed: 6, color: "#eca8d6", glow: 6, tail: 19, delay: 8, collide: 6 };
 const DEFAULT_REPEL_OPTIONS = { radius: 60, strength: 10 };
 
 const TAU = 2 * Math.PI;
-const FRAME_DURATION = 1 / 30;
-const POINTS_PER_STRAND = 180;
+const FRAME_DURATION = 1 / 60;
+const POINTS_PER_STRAND = 90;
 const SEGMENTS_PER_STRAND = POINTS_PER_STRAND - 1;
 
 function clamp(val: number, min: number, max: number): number {
@@ -192,9 +192,11 @@ export default function VortexBackground({
     try {
       renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: true,
+        antialias: false,
         alpha: true,
         powerPreference: "high-performance",
+        depth: false,
+        stencil: false,
       });
     } catch (e) {
       console.warn("[Vortex] WebGL failed:", e);
@@ -715,24 +717,7 @@ export default function VortexBackground({
     let lastTime = performance.now();
     let startTime = 0;
 
-    // Track active scrolling to throttle background simulation and yield 100% CPU to Lenis
-    let isScrolling = false;
-    let scrollTimer: ReturnType<typeof setTimeout> | null = null;
-    const startScroll = () => {
-      isScrolling = true;
-      if (scrollTimer) clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        isScrolling = false;
-      }, 140);
-    };
 
-    window.addEventListener("wheel", startScroll, { passive: true });
-    window.addEventListener("touchmove", startScroll, { passive: true });
-    window.addEventListener("scroll", startScroll, { passive: true });
-    const lenis = (window as any).lenis;
-    if (lenis && typeof lenis.on === "function") {
-      lenis.on("scroll", startScroll);
-    }
 
     const animate = (now: number) => {
       if (isDisposed || !isVisible) return;
@@ -764,10 +749,8 @@ export default function VortexBackground({
       const strUniform = repelUniforms.uStrength;
       strUniform.value += (mouseTargetStrength - strUniform.value) * Math.min(1, 12 * delta);
 
-      // Lines update (capped at 30fps simulation rate, relaxed to 20fps during active scroll)
-      const lineFrameDuration = isScrolling ? 1 / 20 : FRAME_DURATION;
-      if ((frameAccum += delta) >= lineFrameDuration && lineGeometry) {
-        frameAccum = 0;
+      // Silky-smooth continuous line updates at native display refresh rate
+      if (lineGeometry) {
         for (const strand of strands) {
           const strandFlow = flowAccum * strand.speed;
           const oGlow = strand.bright * cfg.lineGlow;
@@ -889,11 +872,8 @@ export default function VortexBackground({
         if (!anyMoving) hasActiveDotPhysics = false;
       }
 
-      // Update dots (synchronized with simulation frame rate to maintain buttery smooth 60-120fps UI scrolling)
-      dotFrameAccum += delta;
-      const dotTargetDuration = isScrolling ? 1 / 15 : FRAME_DURATION;
-      if (dotInstancedMesh && dotCount > 0 && dotsData.length === dotCount && dotFrameAccum >= dotTargetDuration) {
-        dotFrameAccum = 0;
+      // Silky-smooth continuous dot updates at native display refresh rate
+      if (dotInstancedMesh && dotCount > 0 && dotsData.length === dotCount) {
         const dSize = cfg.dotSize;
         for (let i = 0; i < dotCount; i++) {
           const dot = dotsData[i];
@@ -1041,8 +1021,8 @@ export default function VortexBackground({
         comet.geo.attributes.color.needsUpdate = true;
       }
 
-      // Comet-dot collisions (every 4 frames and skip during active scrolling to free CPU)
-      if (!isScrolling && ++collisionCounter % 4 === 0 && dotCount > 0 && cfg.collideForce > 0) {
+      // Comet-dot collisions (every 4 frames)
+      if (++collisionCounter % 4 === 0 && dotCount > 0 && cfg.collideForce > 0) {
         const collideDistSq = 0.64;
         for (const comet of cometsList) {
           if (!comet.racing) continue;
@@ -1116,13 +1096,6 @@ export default function VortexBackground({
       observer.disconnect();
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
-      window.removeEventListener("wheel", startScroll);
-      window.removeEventListener("touchmove", startScroll);
-      window.removeEventListener("scroll", startScroll);
-      if (lenis && typeof lenis.off === "function") {
-        lenis.off("scroll", startScroll);
-      }
-      if (scrollTimer) clearTimeout(scrollTimer);
       if (container) {
         container.removeEventListener("pointermove", onPointerMove);
         container.removeEventListener("pointerleave", onPointerLeave);

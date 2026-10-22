@@ -17,6 +17,7 @@ import React, { useEffect, useRef, useState } from "react";
  */
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -39,9 +40,9 @@ export default function CustomCursor() {
     if (!mounted) return;
 
     const cursor = cursorRef.current;
+    const inner = innerRef.current;
     if (!cursor) return;
 
-    const cursorSize = 22;
     const degrees = 57.296; // 180 / Math.PI
 
     const position = {
@@ -93,11 +94,15 @@ export default function CustomCursor() {
     };
 
     const updateTransform = () => {
-      const scale = isClicking ? 0.75 : isHovering ? 1.15 : 1;
-      cursor.style.transform = `translate3d(${position.pointerX}px, ${position.pointerY}px, 0) rotate(${angleDisplace}deg) scale(${scale})`;
+      // 0ms translation for true 1:1 hardware mouse tracking without drag or lag
+      cursor.style.transform = `translate3d(${position.pointerX}px, ${position.pointerY}px, 0)`;
+      if (inner) {
+        const scale = isClicking ? 0.75 : isHovering ? 1.15 : 1;
+        inner.style.transform = `rotate(${angleDisplace}deg) scale(${scale})`;
+      }
     };
 
-    const move = (e: MouseEvent) => {
+    const move = (e: PointerEvent) => {
       previousPointerX = position.pointerX;
       previousPointerY = position.pointerY;
       position.pointerX = e.clientX;
@@ -160,7 +165,6 @@ export default function CustomCursor() {
     };
 
     window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("mousemove", move, { passive: true });
     window.addEventListener("pointerdown", onMouseDown, { passive: true });
     window.addEventListener("pointerup", onMouseUp, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
@@ -168,7 +172,6 @@ export default function CustomCursor() {
 
     return () => {
       window.removeEventListener("pointermove", move);
-      window.removeEventListener("mousemove", move);
       window.removeEventListener("pointerdown", onMouseDown);
       window.removeEventListener("pointerup", onMouseUp);
       document.removeEventListener("mouseleave", onMouseLeave);
@@ -199,13 +202,19 @@ export default function CustomCursor() {
           z-index: 2147483647;
           user-select: none;
           pointer-events: none;
-          transform-origin: 50% 9.375%;
           will-change: transform;
           opacity: 0;
-          transition: opacity 250ms ease, transform 100ms ease-out;
+          transition: opacity 150ms ease;
           filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
         }
-        .curzr-arrow-pointer svg {
+        .curzr-arrow-inner {
+          width: 100%;
+          height: 100%;
+          transform-origin: 50% 9.375%;
+          will-change: transform;
+          transition: transform 60ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .curzr-arrow-inner svg {
           width: 100%;
           height: 100%;
           display: block;
@@ -216,20 +225,22 @@ export default function CustomCursor() {
         aria-hidden="true"
         className="curzr-arrow-pointer"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-          {/* Black Body Interior */}
-          <path
-            className="inner"
-            d="M25,30a5.82,5.82,0,0,1-1.09-.17l-.2-.07-7.36-3.48a.72.72,0,0,0-.35-.08.78.78,0,0,0-.33.07L8.24,29.54a.66.66,0,0,1-.2.06,5.17,5.17,0,0,1-1,.15,3.6,3.6,0,0,1-3.29-5L12.68,4.2a3.59,3.59,0,0,1,6.58,0l9,20.74A3.6,3.6,0,0,1,25,30Z"
-            fill="#000000"
-          />
-          {/* Crisp White Stroke Outline */}
-          <path
-            className="outer"
-            d="M16,3A2.59,2.59,0,0,1,18.34,4.6l9,20.74A2.59,2.59,0,0,1,25,29a5.42,5.42,0,0,1-.86-.15l-7.37-3.48a1.84,1.84,0,0,0-.77-.17,1.69,1.69,0,0,0-.73.16l-7.4,3.31a5.89,5.89,0,0,1-.79.12,2.59,2.59,0,0,1-2.37-3.62L13.6,4.6A2.58,2.58,0,0,1,16,3m0-2h0A4.58,4.58,0,0,0,11.76,3.8L2.84,24.33A4.58,4.58,0,0,0,7,30.75a6.08,6.08,0,0,0,1.21-.17,1.87,1.87,0,0,0,.4-.13L16,27.18l7.29,3.44a1.64,1.64,0,0,0,.39.14A6.37,6.37,0,0,0,25,31a4.59,4.59,0,0,0,4.21-6.41l-9-20.75A4.62,4.62,0,0,0,16,1Z"
-            fill="#FFFFFF"
-          />
-        </svg>
+        <div ref={innerRef} className="curzr-arrow-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            {/* Black Body Interior */}
+            <path
+              className="inner"
+              d="M25,30a5.82,5.82,0,0,1-1.09-.17l-.2-.07-7.36-3.48a.72.72,0,0,0-.35-.08.78.78,0,0,0-.33.07L8.24,29.54a.66.66,0,0,1-.2.06,5.17,5.17,0,0,1-1,.15,3.6,3.6,0,0,1-3.29-5L12.68,4.2a3.59,3.59,0,0,1,6.58,0l9,20.74A3.6,3.6,0,0,1,25,30Z"
+              fill="#000000"
+            />
+            {/* Crisp White Stroke Outline */}
+            <path
+              className="outer"
+              d="M16,3A2.59,2.59,0,0,1,18.34,4.6l9,20.74A2.59,2.59,0,0,1,25,29a5.42,5.42,0,0,1-.86-.15l-7.37-3.48a1.84,1.84,0,0,0-.77-.17,1.69,1.69,0,0,0-.73.16l-7.4,3.31a5.89,5.89,0,0,1-.79.12,2.59,2.59,0,0,1-2.37-3.62L13.6,4.6A2.58,2.58,0,0,1,16,3m0-2h0A4.58,4.58,0,0,0,11.76,3.8L2.84,24.33A4.58,4.58,0,0,0,7,30.75a6.08,6.08,0,0,0,1.21-.17,1.87,1.87,0,0,0,.4-.13L16,27.18l7.29,3.44a1.64,1.64,0,0,0,.39.14A6.37,6.37,0,0,0,25,31a4.59,4.59,0,0,0,4.21-6.41l-9-20.75A4.62,4.62,0,0,0,16,1Z"
+              fill="#FFFFFF"
+            />
+          </svg>
+        </div>
       </div>
     </>
   );
