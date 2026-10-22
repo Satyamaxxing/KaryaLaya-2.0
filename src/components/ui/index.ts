@@ -10,6 +10,8 @@ export * from "./StatCard";
 export * from "./SpecSheet";
 export * from "./Dialog";
 export * from "./Toast";
+export { default as DataRain } from "./data-rain";
+export * from "./data-rain";
 
 // Backwards-compatible re-exports for work-os primitives
 export * from "../work-os/Badges";

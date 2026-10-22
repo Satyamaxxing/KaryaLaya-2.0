@@ -373,4 +373,77 @@ html.lenis,
   pointer-events: none;
 }
 
+/* =========================================================================
+   DATA-RAIN COMPONENT STYLES (Falling Stars Background & Flow)
+   ========================================================================= */
+:root {
+  --dr-bg-0: #000000;
+  --dr-bg-1: #000000;
+  --dr-bg-2: #000000;
+  --dr-calm: #9ca3af;
+  --dr-mid: #cbd5e1;
+  --dr-hot: #f1f5f9;
+  --dr-core: #ffffff;
+  --dr-vignette: 0;
+  --dr-grain: 0;
+  --dr-bloom-blur: 4px;
+  --dr-bloom-opacity: 0.35;
+}
+
+@keyframes dr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dr-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  background: transparent;
+  animation: dr-fade-in 0.8s ease-out forwards;
+}
+
+.dr-root.dr-root--contained {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.dr-bloom {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(var(--dr-bloom-blur, 4px));
+  opacity: var(--dr-bloom-opacity, 0.45);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.dr-main {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dr-vignette {
+  display: none;
+}
+
+.dr-grain {
+  display: none;
+}
+
+
+
 

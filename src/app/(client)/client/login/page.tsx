@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 
 function LoginContent() {
@@ -44,12 +45,40 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020408] text-white flex flex-col justify-center items-center p-4 selection:bg-emerald-500 selection:text-black relative overflow-hidden">
-      {/* Ambient Radial Backdrop Glow */}
+    <div className="min-h-screen bg-[#000000] text-white flex flex-col justify-center items-center p-4 selection:bg-emerald-500 selection:text-black relative overflow-hidden">
+      {/* Instant-load High-Priority Celestial Saturn Cosmos Background */}
       <div
         aria-hidden="true"
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[450px] bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.12)_0%,rgba(56,189,248,0.06)_40%,transparent_70%)] blur-[60px] pointer-events-none"
-      />
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src="/images/saturn-cosmos-bg.webp"
+          alt="Celestial Saturn Cosmos Landscape Background"
+          fill
+          priority
+          quality={88}
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center center",
+          }}
+        />
+        {/* Subtle vignette darkening for enhanced depth and content contrast */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.55) 100%)",
+            pointerEvents: "none",
+          }}
+        />
+      </div>
 
       <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Portal Brand Header */}

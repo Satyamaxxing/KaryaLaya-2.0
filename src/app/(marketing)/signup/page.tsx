@@ -1,11 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
+import DataRain from "@/components/ui/data-rain";
 
 export default function SignupPage() {
   return (
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "var(--kl-canvas, #020408)",
+        backgroundColor: "#000000",
         color: "#ffffff",
         display: "flex",
         flexDirection: "column",
@@ -16,21 +18,44 @@ export default function SignupPage() {
         overflow: "hidden",
       }}
     >
-      {/* Ambient Background Radial Glow */}
+      {/* Instant-load High-Priority Celestial Saturn Cosmos Background */}
       <div
         aria-hidden="true"
         style={{
-          position: "absolute",
-          top: "40%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "600px",
-          height: "500px",
-          background: "radial-gradient(circle at center, rgba(16, 185, 129, 0.12) 0%, rgba(56, 189, 248, 0.06) 40%, transparent 70%)",
-          filter: "blur(60px)",
+          position: "fixed",
+          inset: 0,
+          zIndex: 0,
           pointerEvents: "none",
+          overflow: "hidden",
         }}
-      />
+      >
+        <Image
+          src="/images/saturn-cosmos-bg.webp"
+          alt="Celestial Saturn Cosmos Landscape Background"
+          fill
+          priority
+          quality={88}
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center center",
+          }}
+        />
+        {/* Subtle vignette darkening for enhanced depth and content contrast */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.45) 100%)",
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+
+      {/* Interactive DataRain Starfall & Flow Canvas */}
+      <DataRain palette={{ calm: "#9ca3af", mid: "#cbd5e1", hot: "#f1f5f9" }} />
+
+
 
       <div
         style={{

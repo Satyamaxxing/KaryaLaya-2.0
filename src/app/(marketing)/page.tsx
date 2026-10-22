@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import LandingNavbar from "@/components/landing/LandingNavbar";
 import VortexBackground from "@/components/background/VortexBackground";
 import IntegrationLogoStrip from "@/components/landing/IntegrationLogoStrip";
@@ -275,23 +276,36 @@ export default function HomePage() {
                   transition: "opacity 700ms 200ms ease, transform 700ms 200ms ease",
                 }}
               >
-                {/* Button 1: StarButton */}
-                <StarButton
-                  backgroundColor="#000000"
-                  style={{
-                    height: "40px",
-                    padding: "0 1.25rem",
-                  }}
-                >
-                  <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em" }}>
-                    GET STARTED
-                  </span>
-                  <DoubleArrowRightIcon size={14} />
-                </StarButton>
+                {/* Button 1: StarButton redirecting to /signup */}
+                <Link href="/signup" style={{ textDecoration: "none" }}>
+                  <StarButton
+                    backgroundColor="#000000"
+                    style={{
+                      height: "40px",
+                      padding: "0 1.25rem",
+                    }}
+                  >
+                    <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em" }}>
+                      GET STARTED
+                    </span>
+                    <DoubleArrowRightIcon size={14} />
+                  </StarButton>
+                </Link>
 
-                {/* Button 2: White Pill with top hairline gradient highlight linking to #how-it-works */}
+                {/* Button 2: White Pill sliding down to #features */}
                 <a
-                  href="#how-it-works"
+                  href="#features"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const target = document.querySelector("#features");
+                    if (target) {
+                      if ((window as any).lenis) {
+                        (window as any).lenis.scrollTo(target, { offset: -76, duration: 1.2 });
+                      } else {
+                        target.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }
+                  }}
                   style={{
                     position: "relative",
                     isolation: "isolate",

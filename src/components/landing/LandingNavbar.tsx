@@ -5,9 +5,9 @@ import Link from "next/link";
 import StarButton, { DoubleArrowRightIcon } from "@/components/ui/StarButton";
 
 const NAV_ITEMS = [
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "How It Works", href: "#features" },
   { label: "Deadlines", href: "#features" },
-  { label: "Collaboration", href: "#how-it-works" },
+  { label: "Collaboration", href: "#how-it-flows" },
   { label: "Client Portal", href: "#insights" },
   { label: "AI & Automations", href: "#features" },
 ];
@@ -185,7 +185,7 @@ export default function LandingNavbar() {
                   Sign In
                   <span className="qronos-nav-underline" />
                 </Link>
-                <Link href="#features" style={{ textDecoration: "none" }}>
+                <Link href="/signup" style={{ textDecoration: "none" }}>
                   <StarButton
                     backgroundColor="#000000"
                     style={{ height: "32px", padding: "0 14px", fontSize: "11px" }}
@@ -446,8 +446,8 @@ export default function LandingNavbar() {
             >
               SIGN IN
             </Link>
-            <a
-              href="#features"
+            <Link
+              href="/signup"
               onClick={() => setMobileOpen(false)}
               style={{
                 display: "inline-flex",
@@ -467,7 +467,7 @@ export default function LandingNavbar() {
             >
               <span>GET STARTED</span>
               <DoubleArrowRightIcon size={14} />
-            </a>
+            </Link>
           </div>
         </div>
       )}
