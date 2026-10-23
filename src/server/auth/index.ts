@@ -12,6 +12,37 @@ import { checkRateLimit, resetRateLimit } from "./rate-limit";
 export * from "./password";
 export * from "./session";
 export * from "./rate-limit";
+export * from "./oauth";
+export * from "./password-reset";
+
+/**
+ * Checks whether an email is already registered in the system (User or ClientContact)
+ */
+export async function checkEmailExists(
+  email: string
+): Promise<{ exists: boolean; isClient: boolean; name?: string }> {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const user = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+    select: { id: true, name: true },
+  });
+
+  if (user) {
+    return { exists: true, isClient: false, name: user.name };
+  }
+
+  const contact = await prisma.clientContact.findFirst({
+    where: { email: normalizedEmail },
+    select: { id: true, name: true },
+  });
+
+  if (contact) {
+    return { exists: true, isClient: true, name: contact.name };
+  }
+
+  return { exists: false, isClient: false };
+}
 
 function slugify(text: string): string {
   return text
