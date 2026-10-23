@@ -106,6 +106,42 @@ a {
 }
 
 /* =========================================================================
+   HERO HEADLINE & SUPPORTING LINE RESPONSIVE ALIGNMENT
+   Centered on mobile UI, preserved left-aligned block on desktop
+   ========================================================================= */
+.hero-headline {
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+@media (min-width: 768px) {
+  .hero-headline {
+    text-align: left !important;
+    display: inline-block !important;
+    width: auto !important;
+  }
+}
+
+.hero-subtitle {
+  text-align: center !important;
+  white-space: normal !important;
+  text-wrap: balance;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  max-width: 32rem !important;
+}
+
+@media (min-width: 768px) {
+  .hero-subtitle {
+    white-space: nowrap !important;
+    max-width: none !important;
+    width: auto !important;
+  }
+}
+
+/* =========================================================================
    CUSTOM RETRO CARD-HAND POINTER CURSOR (32x32 Windows & Cross-Browser Native)
    ========================================================================= */
 a,

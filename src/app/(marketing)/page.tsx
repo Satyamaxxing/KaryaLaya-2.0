@@ -187,14 +187,13 @@ export default function HomePage() {
               }}
             >
               {/* Main Headline */}
-              <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ marginBottom: "1.5rem", width: "100%", display: "flex", justifyContent: "center" }}>
                 <h1
+                  className="hero-headline"
                   style={{
                     position: "relative",
                     zIndex: 10,
                     margin: 0,
-                    display: "inline-block",
-                    textAlign: "left",
                     fontSize: "clamp(2.1rem, 4.6vw, 4.5rem)",
                     lineHeight: 1.02,
                     letterSpacing: "-0.095em",
@@ -249,15 +248,14 @@ export default function HomePage() {
 
               {/* Subtitle */}
               <p
+                className="hero-subtitle"
                 style={{
                   position: "relative",
                   zIndex: 0,
                   marginBottom: "2.25rem",
-                  textAlign: "center",
                   fontSize: "clamp(13px, 1.8vw, 22px)",
                   lineHeight: 1.5,
                   letterSpacing: "-0.01em",
-                  whiteSpace: "nowrap",
                   color: "#ffffff",
                   opacity: mounted ? 1 : 0,
                   transform: mounted ? "translateY(0)" : "translateY(1rem)",
