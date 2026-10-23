@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 import SmoothScroll from "@/components/smooth-scroll/SmoothScroll";
-import CustomCursor from "@/components/landing/CustomCursor";
 
 export const viewport: Viewport = {
   themeColor: "#020408",
@@ -76,7 +75,6 @@ export default function RootLayout({
       </head>
       <body>
         <SmoothScroll />
-        <CustomCursor />
         {children}
       </body>
     </html>
