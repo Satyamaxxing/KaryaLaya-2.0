@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "prisma generate && next build",
-    "postinstall": "prisma generate",
+    "dev": "node scripts/prepare-prisma.js && next dev",
+    "build": "node scripts/prepare-prisma.js && prisma generate && next build",
+    "postinstall": "node scripts/prepare-prisma.js && prisma generate",
+    "prepare:prisma": "node scripts/prepare-prisma.js",
+    "db:push": "node scripts/prepare-prisma.js && prisma db push",
+    "db:generate": "node scripts/prepare-prisma.js && prisma generate",
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx prisma/seed.ts",
-    "test": "tsx --test --test-concurrency=1 test/**/*.test.ts"
+    "test": "node scripts/prepare-prisma.js --provider=sqlite && tsx --test --test-concurrency=1 test/**/*.test.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
