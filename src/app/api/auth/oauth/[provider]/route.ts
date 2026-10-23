@@ -5,6 +5,7 @@ import {
   generateOAuthState,
   getGoogleOAuthUrl,
   getGitHubOAuthUrl,
+  getBaseUrl,
 } from "@/server/auth";
 
 export async function GET(
@@ -14,7 +15,7 @@ export async function GET(
   const { provider } = await params;
   const url = new URL(request.url);
   const next = url.searchParams.get("next") || "/app";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = getBaseUrl(request);
 
   if (provider === "google") {
     if (!isGoogleOAuthConfigured()) {

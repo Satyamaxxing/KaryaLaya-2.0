@@ -5,6 +5,7 @@ import {
   exchangeGitHubCode,
   handleOAuthUser,
   SESSION_COOKIE_NAME,
+  getBaseUrl,
 } from "@/server/auth";
 
 export async function GET(
@@ -16,7 +17,7 @@ export async function GET(
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const error = url.searchParams.get("error");
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = getBaseUrl(request);
 
   if (error) {
     const errorDescription =

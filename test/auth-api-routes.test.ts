@@ -154,4 +154,70 @@ describe("KaryaLaya 2.0 — Auth API Route Endpoints", () => {
     assert.strictEqual(data.configured, false);
     assert.strictEqual(data.error, "GITHUB_NOT_CONFIGURED");
   });
+
+  it("GET /api/auth/oauth/github: generates production redirect_uri when deployed on Vercel", async () => {
+    process.env.GITHUB_CLIENT_ID = "mock-github-client-id";
+    process.env.GITHUB_CLIENT_SECRET = "mock-github-client-secret";
+
+    try {
+      const req = new Request("https://karyalaya20.vercel.app/api/auth/oauth/github", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "x-forwarded-host": "karyalaya20.vercel.app",
+          "x-forwarded-proto": "https",
+        },
+      });
+
+      const res = await oauthRoute(req, {
+        params: Promise.resolve({ provider: "github" }),
+      });
+      const data = await res.json();
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(data.configured, true);
+      assert.ok(
+        data.url.includes(
+          "redirect_uri=https%3A%2F%2Fkaryalaya20.vercel.app%2Fapi%2Fauth%2Fcallback%2Fgithub"
+        ),
+        `Expected redirect_uri to use https://karyalaya20.vercel.app, got: ${data.url}`
+      );
+    } finally {
+      delete process.env.GITHUB_CLIENT_ID;
+      delete process.env.GITHUB_CLIENT_SECRET;
+    }
+  });
+
+  it("GET /api/auth/oauth/google: generates production redirect_uri when deployed on Vercel", async () => {
+    process.env.GOOGLE_CLIENT_ID = "mock-google-client-id";
+    process.env.GOOGLE_CLIENT_SECRET = "mock-google-client-secret";
+
+    try {
+      const req = new Request("https://karyalaya20.vercel.app/api/auth/oauth/google", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "x-forwarded-host": "karyalaya20.vercel.app",
+          "x-forwarded-proto": "https",
+        },
+      });
+
+      const res = await oauthRoute(req, {
+        params: Promise.resolve({ provider: "google" }),
+      });
+      const data = await res.json();
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(data.configured, true);
+      assert.ok(
+        data.url.includes(
+          "redirect_uri=https%3A%2F%2Fkaryalaya20.vercel.app%2Fapi%2Fauth%2Fcallback%2Fgoogle"
+        ),
+        `Expected redirect_uri to use https://karyalaya20.vercel.app, got: ${data.url}`
+      );
+    } finally {
+      delete process.env.GOOGLE_CLIENT_ID;
+      delete process.env.GOOGLE_CLIENT_SECRET;
+    }
+  });
 });

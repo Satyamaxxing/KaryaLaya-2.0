@@ -14,6 +14,7 @@ import {
   getGitHubOAuthUrl,
   handleOAuthUser,
   getSessionByToken,
+  getBaseUrl,
 } from "../src/server/auth";
 
 describe("KaryaLaya 2.0 — Production Auth Features & OAuth Architecture", () => {
@@ -146,6 +147,44 @@ describe("KaryaLaya 2.0 — Production Auth Features & OAuth Architecture", () =
       const githubUrl = getGitHubOAuthUrl(state, "http://localhost:3000/api/auth/callback/github");
       assert.ok(githubUrl.startsWith("https://github.com/login/oauth/authorize?"));
       assert.ok(githubUrl.includes(`state=${state}`));
+    });
+
+    it("dynamically resolves production origin vs localhost development via getBaseUrl", () => {
+      // 1. Deployed Vercel request with x-forwarded headers
+      const vercelReq = new Request("https://karyalaya20.vercel.app/api/auth/oauth/github", {
+        headers: {
+          "x-forwarded-host": "karyalaya20.vercel.app",
+          "x-forwarded-proto": "https",
+        },
+      });
+      assert.strictEqual(getBaseUrl(vercelReq), "https://karyalaya20.vercel.app");
+
+      // 2. OAuth callback URI generated from Vercel request uses deployed origin
+      const vercelCallback = `${getBaseUrl(vercelReq)}/api/auth/callback/github`;
+      assert.strictEqual(vercelCallback, "https://karyalaya20.vercel.app/api/auth/callback/github");
+      const vercelAuthUrl = getGitHubOAuthUrl("test-state", vercelCallback);
+      assert.ok(
+        vercelAuthUrl.includes(
+          "redirect_uri=https%3A%2F%2Fkaryalaya20.vercel.app%2Fapi%2Fauth%2Fcallback%2Fgithub"
+        )
+      );
+
+      // 3. Localhost request in development preserves http://localhost:3000
+      const localReq = new Request("http://localhost:3000/api/auth/oauth/github", {
+        headers: {
+          host: "localhost:3000",
+        },
+      });
+      assert.strictEqual(getBaseUrl(localReq), "http://localhost:3000");
+
+      const localCallback = `${getBaseUrl(localReq)}/api/auth/callback/github`;
+      assert.strictEqual(localCallback, "http://localhost:3000/api/auth/callback/github");
+      const localAuthUrl = getGitHubOAuthUrl("test-state", localCallback);
+      assert.ok(
+        localAuthUrl.includes(
+          "redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fgithub"
+        )
+      );
     });
 
     it("atomically registers new OAuth user as OWNER and returns valid session", async () => {

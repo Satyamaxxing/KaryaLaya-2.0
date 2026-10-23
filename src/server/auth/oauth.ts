@@ -14,6 +14,58 @@ export function generateOAuthState(): string {
   return crypto.randomBytes(24).toString("hex");
 }
 
+/**
+ * Resolves the canonical base URL dynamically:
+ * 1. Checks incoming Request headers (x-forwarded-host, host, x-forwarded-proto)
+ * 2. Checks NEXT_PUBLIC_APP_URL environment variable (unless pointing to localhost in production)
+ * 3. Checks standard Vercel environment variables (VERCEL_PROJECT_PRODUCTION_URL, VERCEL_URL)
+ * 4. Defaults to http://localhost:3000 for local development
+ */
+export function getBaseUrl(request?: Request): string {
+  if (request) {
+    const forwardedHost = request.headers.get("x-forwarded-host");
+    const host = forwardedHost || request.headers.get("host");
+    if (host) {
+      const proto =
+        request.headers.get("x-forwarded-proto") ||
+        (host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https");
+      return `${proto}://${host}`.replace(/\/+$/, "");
+    }
+
+    try {
+      const url = new URL(request.url);
+      if (url.origin && url.origin !== "null") {
+        return url.origin.replace(/\/+$/, "");
+      }
+    } catch {}
+  }
+
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    const envUrl = process.env.NEXT_PUBLIC_APP_URL.trim().replace(/\/+$/, "");
+    if (
+      process.env.NODE_ENV === "production" &&
+      (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"))
+    ) {
+      if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+        return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/+$/, "")}`;
+      }
+      if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL.replace(/\/+$/, "")}`;
+      }
+    }
+    return envUrl;
+  }
+
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/+$/, "")}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL.replace(/\/+$/, "")}`;
+  }
+
+  return "http://localhost:3000";
+}
+
 export function getGoogleOAuthUrl(state: string, redirectUri: string): string {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const params = new URLSearchParams({

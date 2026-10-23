@@ -8,6 +8,7 @@ import {
   PrincipalRole,
 } from "./session";
 import { checkRateLimit, resetRateLimit } from "./rate-limit";
+import { getBaseUrl } from "./oauth";
 
 export * from "./password";
 export * from "./session";
@@ -322,7 +323,7 @@ export async function inviteTeamMember(input: {
     },
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = getBaseUrl();
   const inviteUrl = `${baseUrl}/invite/${cryptoToken}`;
 
   return {
