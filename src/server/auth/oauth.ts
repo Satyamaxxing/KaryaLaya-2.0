@@ -14,56 +14,87 @@ export function generateOAuthState(): string {
   return crypto.randomBytes(24).toString("hex");
 }
 
+export const PRODUCTION_APP_URL = "https://karyalaya20.vercel.app";
+
 /**
  * Resolves the canonical base URL dynamically:
- * 1. Checks incoming Request headers (x-forwarded-host, host, x-forwarded-proto)
- * 2. Checks NEXT_PUBLIC_APP_URL environment variable (unless pointing to localhost in production)
- * 3. Checks standard Vercel environment variables (VERCEL_PROJECT_PRODUCTION_URL, VERCEL_URL)
- * 4. Defaults to http://localhost:3000 for local development
+ * - In production (Vercel deployment or NODE_ENV === 'production'):
+ *   1. Uses incoming request host if it is a live host (e.g. karyalaya20.vercel.app or custom domain)
+ *   2. Uses NEXT_PUBLIC_APP_URL if explicitly set to a non-localhost URL
+ *   3. Uses Vercel production system variables (VERCEL_PROJECT_PRODUCTION_URL, VERCEL_URL)
+ *   4. Always falls back to https://karyalaya20.vercel.app (never localhost)
+ * - In local development:
+ *   Preserves http://localhost:3000 or the local request host.
  */
 export function getBaseUrl(request?: Request): string {
+  const isVercel = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+  const isProduction = process.env.NODE_ENV === "production" || isVercel;
+
+  // 1. In Local Development: preserve localhost / 127.0.0.1
+  if (!isProduction) {
+    if (request) {
+      const forwardedHost = request.headers.get("x-forwarded-host");
+      const host = forwardedHost || request.headers.get("host");
+      if (host) {
+        const proto = request.headers.get("x-forwarded-proto") || "http";
+        return `${proto}://${host}`.replace(/\/+$/, "");
+      }
+      try {
+        const url = new URL(request.url);
+        if (url.origin && url.origin !== "null") {
+          return url.origin.replace(/\/+$/, "");
+        }
+      } catch {}
+    }
+
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+      return process.env.NEXT_PUBLIC_APP_URL.trim().replace(/\/+$/, "");
+    }
+
+    return "http://localhost:3000";
+  }
+
+  // 2. In Production (Vercel / live deployment):
+  // Inspect incoming request headers
   if (request) {
     const forwardedHost = request.headers.get("x-forwarded-host");
     const host = forwardedHost || request.headers.get("host");
-    if (host) {
-      const proto =
-        request.headers.get("x-forwarded-proto") ||
-        (host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https");
+    if (host && !host.includes("localhost") && !host.includes("127.0.0.1")) {
+      const proto = request.headers.get("x-forwarded-proto") || "https";
       return `${proto}://${host}`.replace(/\/+$/, "");
     }
 
     try {
       const url = new URL(request.url);
-      if (url.origin && url.origin !== "null") {
+      if (
+        url.origin &&
+        url.origin !== "null" &&
+        !url.hostname.includes("localhost") &&
+        !url.hostname.includes("127.0.0.1")
+      ) {
         return url.origin.replace(/\/+$/, "");
       }
     } catch {}
   }
 
+  // Check NEXT_PUBLIC_APP_URL if explicitly configured with a production domain
   if (process.env.NEXT_PUBLIC_APP_URL) {
     const envUrl = process.env.NEXT_PUBLIC_APP_URL.trim().replace(/\/+$/, "");
-    if (
-      process.env.NODE_ENV === "production" &&
-      (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"))
-    ) {
-      if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-        return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/+$/, "")}`;
-      }
-      if (process.env.VERCEL_URL) {
-        return `https://${process.env.VERCEL_URL.replace(/\/+$/, "")}`;
-      }
+    if (!envUrl.includes("localhost") && !envUrl.includes("127.0.0.1")) {
+      return envUrl;
     }
-    return envUrl;
   }
 
+  // Check Vercel system variables
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/+$/, "")}`;
   }
-  if (process.env.VERCEL_URL) {
+  if (process.env.VERCEL_URL && !process.env.VERCEL_URL.includes("localhost")) {
     return `https://${process.env.VERCEL_URL.replace(/\/+$/, "")}`;
   }
 
-  return "http://localhost:3000";
+  // Guaranteed fallback for production: never use localhost
+  return PRODUCTION_APP_URL;
 }
 
 export function getGoogleOAuthUrl(state: string, redirectUri: string): string {

@@ -185,6 +185,28 @@ describe("KaryaLaya 2.0 — Production Auth Features & OAuth Architecture", () =
           "redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fgithub"
         )
       );
+
+      // 4. In production environment, always returns https://karyalaya20.vercel.app and rejects localhost
+      const prevNodeEnv = process.env.NODE_ENV;
+      const prevAppUrl = process.env.NEXT_PUBLIC_APP_URL;
+      const envObj = process.env as Record<string, string | undefined>;
+      try {
+        envObj.NODE_ENV = "production";
+        envObj.NEXT_PUBLIC_APP_URL = "http://localhost:3000";
+
+        // Even with NEXT_PUBLIC_APP_URL=http://localhost:3000 in production, it refuses localhost
+        assert.strictEqual(getBaseUrl(), "https://karyalaya20.vercel.app");
+
+        // An internal request with host: localhost in production still resolves to production domain
+        const internalReq = new Request("http://localhost:3000/api/auth/oauth/github", {
+          headers: { host: "localhost:3000" },
+        });
+        assert.strictEqual(getBaseUrl(internalReq), "https://karyalaya20.vercel.app");
+      } finally {
+        envObj.NODE_ENV = prevNodeEnv;
+        if (prevAppUrl) envObj.NEXT_PUBLIC_APP_URL = prevAppUrl;
+        else delete envObj.NEXT_PUBLIC_APP_URL;
+      }
     });
 
     it("atomically registers new OAuth user as OWNER and returns valid session", async () => {
