@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import AuthWaveCanvas from "./AuthWaveCanvas";
+import AuthTestimonials from "./AuthTestimonials";
 import {
   canAccessRoute,
   getDefaultRedirectForRole,
@@ -263,32 +264,8 @@ export default function UnifiedAuthView({ initialMode = "login" }: UnifiedAuthVi
           {/* Dynamic Curved Line Artwork Canvas (Silky 60fps undulation from reference contact sheet) */}
           <AuthWaveCanvas />
 
-          {/* Bottom-Left: Anchored Testimonial (Exact line breaking & typography from reference) */}
-          <div style={{ position: "relative", zIndex: 20, maxWidth: "520px", marginBottom: "0.5rem" }}>
-            <blockquote
-              style={{
-                margin: 0,
-                fontSize: "clamp(16px, 1.4vw, 18.5px)",
-                fontWeight: 400,
-                lineHeight: 1.4,
-                letterSpacing: "-0.015em",
-                color: "#f4f4f5",
-              }}
-            >
-              &ldquo;This Platform has helped me to save time and serve my<br />clients faster than ever before.&rdquo;
-            </blockquote>
-            <div
-              style={{
-                marginTop: "12px",
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "13px",
-                color: "#a1a1aa",
-                letterSpacing: "0.02em",
-              }}
-            >
-              ~ Ali Hassan
-            </div>
-          </div>
+          {/* Bottom-Left: Anchored Testimonial Rotator */}
+          <AuthTestimonials />
         </div>
 
         {/* =========================================================================
