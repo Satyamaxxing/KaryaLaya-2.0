@@ -143,13 +143,59 @@ Open [http://localhost:3000](http://localhost:3000) to view the cinematic market
 
 ### 4. Database Setup & Seeding
 
+KaryaLaya 2.0 supports a dual-database architecture: zero-overhead **SQLite** for instant local development and **Neon Serverless PostgreSQL** for production deployments on Vercel.
+
+#### A. Local Development (SQLite — Zero Configuration)
+By default, running commands without a PostgreSQL `DATABASE_URL` uses local SQLite (`file:./dev.db`).
+
 ```bash
-# Push schema to database (SQLite)
-npx prisma db push
+# Push schema to local SQLite database
+npm run db:push
 
 # Seed demo agency with team members, deliverables, and clients
 npm run db:seed
 ```
+
+#### B. Production & Staging (Neon PostgreSQL & Vercel)
+For production deployments (such as the Vercel project `karyalaya20`), KaryaLaya uses **Neon Serverless PostgreSQL**.
+
+1. **Connection String Architecture:**
+   - **Pooled Connection (`DATABASE_URL`)**: For serverless web application runtime and API routes, use Neon's pooled connection string with `?sslmode=require&pgbouncer=true`:
+     ```env
+     DATABASE_URL="postgresql://[user]:[password]@[neon-host]-pooler.neon.tech/[dbname]?sslmode=require&pgbouncer=true"
+     ```
+     This routes queries through PgBouncer connection pooling to avoid exhausting connection limits under serverless spikes.
+   - **Direct Connection (`DIRECT_URL`)**: For schema pushes, migrations, or DDL operations that require advisory locks or session-level features:
+     ```env
+     DIRECT_URL="postgresql://[user]:[password]@[neon-host].neon.tech/[dbname]?sslmode=require"
+     ```
+
+2. **Automated Dual-Provider Switcher (`scripts/prepare-prisma.js`):**
+   - KaryaLaya includes an automated provider adaptation script (`scripts/prepare-prisma.js`) executed before `dev`, `build`, and `db:push`.
+   - When a PostgreSQL `DATABASE_URL` (starting with `postgres://` or `postgresql://`) is detected or when running in a Vercel build environment (`VERCEL=1`), it automatically configures `prisma/schema.prisma` with `provider = "postgresql"` and generates the client.
+   - When using SQLite locally, it seamlessly restores `provider = "sqlite"`.
+
+3. **Vercel Production Deployment Configuration:**
+   - In the Vercel Dashboard (**Project Settings → Environment Variables**):
+     - Set `DATABASE_URL` to your Neon pooled connection string.
+     - Optionally set `DIRECT_URL` to your Neon direct connection string.
+   - Vercel builds run `npm run build` which triggers `scripts/prepare-prisma.js`, compiling the production PostgreSQL client before Next.js builds.
+
+4. **Applying Schema to Neon:**
+   - To push schema changes to your Neon database from your local environment:
+     ```bash
+     # Ensure DATABASE_URL in .env.local points to your Neon database (direct or pooled with DDL support)
+     npm run db:push
+
+     # Optionally seed initial agency data
+     npm run db:seed
+     ```
+
+#### C. Drizzle ORM & Neon Compatibility Notes
+For teams maintaining or migrating workflows between Drizzle ORM (`packages/database`) and Prisma:
+- **Connection Separation**: Always use the direct connection endpoint (`DIRECT_URL`) for running migrations (e.g., `drizzle-kit migrate` or SQL migrations including `0000_grey_spiral.sql` and `0001_row_level_security.sql`) because PostgreSQL Row-Level Security (RLS) policies, schema introspection, and DDL transactions are incompatible with transaction-mode pooling.
+- **Serverless Queries**: Use the Neon connection pooler endpoint (`DATABASE_URL` with `-pooler` hostname) for application query execution to ensure high throughput in serverless environments.
+- **Secret Management**: Never commit connection strings containing credentials to git. Keep them strictly in root `.env.local` for local execution and Vercel Project Environment Variables for production.
 
 ### 5. Local Database Backup & Restore
 
