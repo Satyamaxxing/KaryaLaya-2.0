@@ -97,6 +97,36 @@ export function getBaseUrl(request?: Request): string {
   return PRODUCTION_APP_URL;
 }
 
+/**
+ * Resolves the Google OAuth redirect URI strictly against authorized Google Cloud Console URIs:
+ * - Local development: http://localhost:3000/api/auth/callback/google
+ * - Production / Vercel: https://karyalaya20.vercel.app/api/auth/callback/google
+ * This prevents preview deployment URLs or unverified proxy headers from causing Error 400: redirect_uri_mismatch.
+ */
+export function getGoogleOAuthRedirectUri(request?: Request): string {
+  const isVercel = Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+  const isProduction = process.env.NODE_ENV === "production" || isVercel;
+
+  if (!isProduction) {
+    if (request) {
+      const forwardedHost = request.headers.get("x-forwarded-host");
+      const host = (forwardedHost || request.headers.get("host") || "").split(",")[0].trim();
+      if (host.includes("localhost") || host.includes("127.0.0.1")) {
+        return `http://${host}/api/auth/callback/google`;
+      }
+    }
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+      const envUrl = process.env.NEXT_PUBLIC_APP_URL.trim().replace(/\/+$/, "");
+      if (envUrl.includes("localhost") || envUrl.includes("127.0.0.1")) {
+        return `${envUrl}/api/auth/callback/google`;
+      }
+    }
+    return "http://localhost:3000/api/auth/callback/google";
+  }
+
+  return `${PRODUCTION_APP_URL}/api/auth/callback/google`;
+}
+
 export function getGoogleOAuthUrl(state: string, redirectUri: string): string {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const params = new URLSearchParams({

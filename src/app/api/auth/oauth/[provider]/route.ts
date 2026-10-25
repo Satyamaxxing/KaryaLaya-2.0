@@ -6,6 +6,7 @@ import {
   getGoogleOAuthUrl,
   getGitHubOAuthUrl,
   getBaseUrl,
+  getGoogleOAuthRedirectUri,
 } from "@/server/auth";
 
 export async function GET(
@@ -40,7 +41,7 @@ export async function GET(
     }
 
     const state = generateOAuthState();
-    const redirectUri = `${baseUrl}/api/auth/callback/google`;
+    const redirectUri = getGoogleOAuthRedirectUri(request);
     const authUrl = getGoogleOAuthUrl(state, redirectUri);
 
     const cookieOptions = {
