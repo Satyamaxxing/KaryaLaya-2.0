@@ -43,20 +43,24 @@ export async function GET(
     const redirectUri = `${baseUrl}/api/auth/callback/google`;
     const authUrl = getGoogleOAuthUrl(state, redirectUri);
 
-    if (request.headers.get("accept")?.includes("application/json")) {
-      return NextResponse.json({ configured: true, url: authUrl });
-    }
-
-    const response = NextResponse.redirect(authUrl);
-    response.cookies.set({
+    const cookieOptions = {
       name: "karyalaya_oauth_state_google",
       value: JSON.stringify({ state, next }),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
       maxAge: 10 * 60, // 10 minutes
-    });
+    };
+
+    if (request.headers.get("accept")?.includes("application/json")) {
+      const response = NextResponse.json({ configured: true, url: authUrl });
+      response.cookies.set(cookieOptions);
+      return response;
+    }
+
+    const response = NextResponse.redirect(authUrl);
+    response.cookies.set(cookieOptions);
     return response;
   }
 
@@ -85,20 +89,24 @@ export async function GET(
     const redirectUri = `${baseUrl}/api/auth/callback/github`;
     const authUrl = getGitHubOAuthUrl(state, redirectUri);
 
-    if (request.headers.get("accept")?.includes("application/json")) {
-      return NextResponse.json({ configured: true, url: authUrl });
-    }
-
-    const response = NextResponse.redirect(authUrl);
-    response.cookies.set({
+    const cookieOptions = {
       name: "karyalaya_oauth_state_github",
       value: JSON.stringify({ state, next }),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
       maxAge: 10 * 60, // 10 minutes
-    });
+    };
+
+    if (request.headers.get("accept")?.includes("application/json")) {
+      const response = NextResponse.json({ configured: true, url: authUrl });
+      response.cookies.set(cookieOptions);
+      return response;
+    }
+
+    const response = NextResponse.redirect(authUrl);
+    response.cookies.set(cookieOptions);
     return response;
   }
 

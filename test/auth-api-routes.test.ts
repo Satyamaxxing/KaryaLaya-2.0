@@ -155,12 +155,12 @@ describe("KaryaLaya 2.0 — Auth API Route Endpoints", () => {
     assert.strictEqual(data.error, "GITHUB_NOT_CONFIGURED");
   });
 
-  it("GET /api/auth/oauth/github: generates production redirect_uri when deployed on Vercel", async () => {
+  it("GET /api/auth/oauth/github: generates production redirect_uri and sets state cookie on JSON response", async () => {
     process.env.GITHUB_CLIENT_ID = "mock-github-client-id";
     process.env.GITHUB_CLIENT_SECRET = "mock-github-client-secret";
 
     try {
-      const req = new Request("https://karyalaya20.vercel.app/api/auth/oauth/github", {
+      const req = new Request("https://karyalaya20.vercel.app/api/auth/oauth/github?next=/app/dashboard", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -182,18 +182,27 @@ describe("KaryaLaya 2.0 — Auth API Route Endpoints", () => {
         ),
         `Expected redirect_uri to use https://karyalaya20.vercel.app, got: ${data.url}`
       );
+
+      // Regression check: verify karyalaya_oauth_state_github cookie is set on the JSON response
+      const cookie = res.cookies.get("karyalaya_oauth_state_github");
+      assert.ok(cookie, "Expected karyalaya_oauth_state_github cookie to be set on JSON response");
+      assert.ok(cookie.value, "Cookie value should not be empty");
+      const parsed = JSON.parse(cookie.value);
+      assert.ok(parsed.state, "Stored state must contain random state string");
+      assert.strictEqual(parsed.next, "/app/dashboard");
+      assert.ok(data.url.includes(`state=${parsed.state}`), "authUrl state param must match cookie state");
     } finally {
       delete process.env.GITHUB_CLIENT_ID;
       delete process.env.GITHUB_CLIENT_SECRET;
     }
   });
 
-  it("GET /api/auth/oauth/google: generates production redirect_uri when deployed on Vercel", async () => {
+  it("GET /api/auth/oauth/google: generates production redirect_uri and sets state cookie on JSON response", async () => {
     process.env.GOOGLE_CLIENT_ID = "mock-google-client-id";
     process.env.GOOGLE_CLIENT_SECRET = "mock-google-client-secret";
 
     try {
-      const req = new Request("https://karyalaya20.vercel.app/api/auth/oauth/google", {
+      const req = new Request("https://karyalaya20.vercel.app/api/auth/oauth/google?next=/app/projects", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -215,6 +224,15 @@ describe("KaryaLaya 2.0 — Auth API Route Endpoints", () => {
         ),
         `Expected redirect_uri to use https://karyalaya20.vercel.app, got: ${data.url}`
       );
+
+      // Regression check: verify karyalaya_oauth_state_google cookie is set on the JSON response
+      const cookie = res.cookies.get("karyalaya_oauth_state_google");
+      assert.ok(cookie, "Expected karyalaya_oauth_state_google cookie to be set on JSON response");
+      assert.ok(cookie.value, "Cookie value should not be empty");
+      const parsed = JSON.parse(cookie.value);
+      assert.ok(parsed.state, "Stored state must contain random state string");
+      assert.strictEqual(parsed.next, "/app/projects");
+      assert.ok(data.url.includes(`state=${parsed.state}`), "authUrl state param must match cookie state");
     } finally {
       delete process.env.GOOGLE_CLIENT_ID;
       delete process.env.GOOGLE_CLIENT_SECRET;
